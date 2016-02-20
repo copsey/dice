@@ -7,5 +7,5 @@ src_files = [
     'source/main.cpp'
 ]
 
-env = Environment(CPPFLAGS = ['-std=c++11'])
+env = Environment(CPPFLAGS = ['-std=c++11', '-O2'])
 env.Program('dice', src_files)
