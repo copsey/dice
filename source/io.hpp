@@ -1,5 +1,5 @@
-#ifndef DICE_PRINT
-#define DICE_PRINT
+#ifndef DICE_IO
+#define DICE_IO
 
 #include <ostream>
 #include <string>
