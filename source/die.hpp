@@ -12,21 +12,21 @@ namespace dice {
       struct bad_num_sides { int n; };
 
       /// Make a six-sided die.
-      Die () = default;
+      Die() = default;
 
       /// Make an `n`-sided die.
       ///
-      /// @throws `bad_num_sides` if `n` is non-positive.
-      Die (int n);
+      /// @throws `bad_num_sides` if `n` is less than 1.
+      Die(int n);
 
       /// The number of sides that the die has.
-      int num_sides () const;
+      int num_sides() const;
 
       /// Roll the die.
-      int operator() ();
+      int operator()() const;
 
    private:
-      std::uniform_int_distribution<result_type> dist{1, 6};
+      mutable std::uniform_int_distribution<result_type> dist{1, 6};
    };
 }
 
