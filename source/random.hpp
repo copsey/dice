@@ -10,7 +10,7 @@ namespace dice {
    extern std::mt19937 rand_eng;
 
    /// Seed `rand_eng` with a value from a `random_device`.
-   void seed ();
+   void seed();
 }
 
 #endif
