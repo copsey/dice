@@ -4,8 +4,8 @@
 
 #include "string.hpp"
 
-std::vector<std::string> dice::util::split_and_prune (const std::string & str) {
-   std::vector<std::string> substrings;
+std::vector<std::string> dice::util::split_and_prune(const std::string & str) {
+   std::vector<std::string> substrings{};
 
    auto i = str.begin();
    auto j = i;
@@ -25,7 +25,7 @@ std::vector<std::string> dice::util::split_and_prune (const std::string & str) {
    return substrings;
 }
 
-int dice::util::to_i (const std::string & str, int base) {
+int dice::util::to_i(const std::string & str, int base) {
    std::size_t pos;
    auto i = std::stoi(str, &pos, base);
 
@@ -34,4 +34,8 @@ int dice::util::to_i (const std::string & str, int base) {
    }
 
    return i;
+}
+
+void dice::util::pad_front(std::string & str, char ch, std::string::size_type min_l) {
+   str.insert(0, (str.size() < min_l) ? (min_l - str.size()) : 0, ch);
 }
