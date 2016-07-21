@@ -30,7 +30,7 @@ int dice::util::to_i(const std::string & str, int base) {
    auto i = std::stoi(str, &pos, base);
 
    if (pos < str.size()) {
-      throw std::invalid_argument{"dice::to_i: excess chars"};
+      throw std::invalid_argument{"dice::util::to_i: excess chars"};
    }
 
    return i;
