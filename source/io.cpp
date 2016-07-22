@@ -1,5 +1,6 @@
 #include <iostream>
 
+#include "util/math.hpp"
 #include "util/numeric.hpp"
 #include "util/string.hpp"
 
@@ -24,6 +25,28 @@ std::ostream & dice::operator<<(std::ostream & os, const std::vector<Die> & dice
    return os;
 }
 
+void dice::write_die_roll(const Die & d, Die::result_type r, std::ostream & os) {
+   auto max_r = d.num_sides();
+
+   auto str = std::to_string(r);
+   auto len = util::num_digits(max_r);
+   util::pad_front(str, ' ', len);
+
+   os << str;
+}
+
+void dice::write_dice_roll_sum(const std::vector<Die> & dice, const std::vector<Die::result_type> & roll, std::ostream & os) {
+   auto sum = util::sum(roll);
+   Die::result_type max_sum = 0;
+   for (auto & d: dice) max_sum += d.num_sides();
+
+   auto str = std::to_string(sum);
+   auto len = util::num_digits(max_sum);
+   util::pad_front(str, ' ', len);
+
+   os << str;
+}
+
 void dice::print_chosen_dice(const std::vector<Die> & dice) {
    if (dice.empty()) {
       cout << "(no dice chosen)\n";
@@ -40,23 +63,30 @@ void dice::print_default_dice(const std::vector<Die> & dice) {
    }
 }
 
-void dice::print_dice_roll(const std::vector<Die::result_type> & roll) {
+void dice::print_dice_roll(const std::vector<Die> & dice, const std::vector<Die::result_type> & roll) {
    switch (roll.size()) {
     case 0:
       cout << "0\n";
       break;
 
     case 1:
-      cout << roll.front() << '\n';
+      write_die_roll(dice[0], roll[0], cout);
+      cout << '\n';
       break;
 
-    default:
-      cout << roll.front();
-      for (auto i = roll.begin() + 1; i != roll.end(); ++i) {
-         cout << " + " << *i;
+    default: {
+      write_die_roll(dice[0], roll[0], cout);
+
+      for (typename std::vector<Die>::size_type i = 1; i < dice.size(); ++i) {
+         cout << " + ";
+         write_die_roll(dice[i], roll[i], cout);
       }
-      cout << " = " << util::sum(roll) << '\n';
+
+      cout << " = ";
+      write_dice_roll_sum(dice, roll, cout);
+      cout << '\n';
       break;
+    }
    }
 }
 

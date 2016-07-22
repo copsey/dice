@@ -16,16 +16,16 @@ using namespace dice;
 ///
 /// @returns a vector containing each roll, in the same order as the
 /// corresponding dice.
-std::vector<Die::result_type> roll_dice(std::vector<Die> & dice) {
+std::vector<Die::result_type> roll_dice(const std::vector<Die> & dice) {
    std::vector<Die::result_type> roll{};
    for (auto & d: dice) roll.push_back(d());
    return roll;
 }
 
 /// Roll each of the given dice and print the result.
-void roll_dice_and_print(std::vector<Die> & dice) {
+void roll_dice_and_print(const std::vector<Die> & dice) {
    auto roll = roll_dice(dice);
-   print_dice_roll(roll);
+   print_dice_roll(dice, roll);
 }
 
 int main(int arg_c, const char * arg_v[]) {

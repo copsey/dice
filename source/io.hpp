@@ -14,6 +14,26 @@ namespace dice {
    /// Write `dice` to `os` as a list in the form "dn1 dn2 ...".
    std::ostream & operator<<(std::ostream & os, const std::vector<Die> & dice);
 
+   /// Write the die roll `r` obtained from `d` to `os`.
+   ///
+   /// Extra spaces are inserted at the front of the outputted text based on the
+   /// number of sides of `d`, so that the same number of characters will be
+   /// output regardless of which value `r` takes.
+   ///
+   /// `r` should be a valid roll, i.e. obtainable by rolling `d`.
+   void write_die_roll(const Die & d, Die::result_type r, std::ostream & os);
+
+   /// Write the sum of the dice rolls in `roll` to `os`.
+   ///
+   /// Extra spaces are inserted at the front of the outputted text based on the
+   /// maximum possible sum that can be obtained by rolling the dice in `dice`,
+   /// so that the same number of characters will be output regardless of the
+   /// rolls that are passed in.
+   ///
+   /// Each `roll[i]` should be obtainable by rolling `dice[i]`.
+   /// Furthermore, `dice.size()` and `roll.size()` should be equal.
+   void write_dice_roll_sum(const std::vector<Die> & dice, const std::vector<Die::result_type> & roll, std::ostream & os);
+
    /// Print the chosen set of dice.
    void print_chosen_dice(const std::vector<Die> & dice);
 
@@ -21,7 +41,10 @@ namespace dice {
    void print_default_dice(const std::vector<Die> & dice);
 
    /// Print the given dice roll and its sum.
-   void print_dice_roll(const std::vector<Die::result_type> & roll);
+   ///
+   /// Each `roll[i]` should be obtainable by rolling `dice[i]`.
+   /// Furthermore, `dice.size()` and `roll.size()` should be equal.
+   void print_dice_roll(const std::vector<Die> & dice, const std::vector<Die::result_type> & roll);
 
    /// Print help related to the interface within the program.
    void print_program_help();
