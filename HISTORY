@@ -1,4 +1,4 @@
 # History
 
-## [v0.1] (2016-07-22)
+### v0.1 (2016-07-22)
 - Pad spaces before dice rolls so that the output is always aligned in columns.
