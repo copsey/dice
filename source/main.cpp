@@ -1,5 +1,6 @@
 #include <iostream>
 #include <stdexcept>
+#include <string>
 #include <vector>
 
 #include "util/cli.hpp"
@@ -15,8 +16,8 @@ using namespace dice;
 ///
 /// @returns a vector containing each roll, in the same order as the
 /// corresponding dice.
-std::vector<Die::result_type> roll_dice (std::vector<Die> & dice) {
-   std::vector<Die::result_type> roll;
+std::vector<Die::result_type> roll_dice(std::vector<Die> & dice) {
+   std::vector<Die::result_type> roll{};
    for (auto & d: dice) roll.push_back(d());
    return roll;
 }
@@ -27,11 +28,12 @@ void roll_dice_and_print(std::vector<Die> & dice) {
    print_dice_roll(roll);
 }
 
-int main (int arg_c, const char * arg_v[]) {
-   std::vector<Die> dice;
+int main(int arg_c, const char * arg_v[]) {
+   std::vector<Die> dice{};
    bool quit = false;
 
-   { // process command-line input
+   // process command-line input
+   {
       auto args = util::encapsulate_args(arg_c, arg_v);
 
       // process command-line options
@@ -95,11 +97,11 @@ int main (int arg_c, const char * arg_v[]) {
       } else if (commands[0] == "l" || commands[0] == "list") {
          print_chosen_dice(dice);
       } else if (commands[0] == "c" || commands[0] == "choose") {
-         std::vector<Die> new_dice;
+         std::vector<Die> new_dice{};
          auto success = true;
 
-         for (decltype(commands)::size_type i = 1; i < commands.size(); ++i) {
-            auto & str = commands[i];
+         for (auto i = commands.begin() + 1; i != commands.end(); ++i) {
+            auto & str = *i;
 
             if (!read_die(str, new_dice)) success = false;
          }
