@@ -92,28 +92,28 @@ void dice::print_dice_roll(const std::vector<Die> & dice, const std::vector<Die:
 
 void dice::print_program_help() {
 	cout << "Press ENTER with a blank input to roll the dice.\n"
-			  "Enter 'c n1 n2 ...' to choose a new set of dice to roll,\n"
-			  "  where n1, n2, ... are the number of sides on the dice.\n"
-			  "Enter 'l' to list the chosen dice.\n"
-			  "Enter 'h' to display this help message.\n"
-			  "Enter 'q' to quit the program.\n";
+			"Enter 'c n1 n2 ...' to choose a new set of dice to roll,\n"
+			"  where n1, n2, ... are the number of sides on the dice.\n"
+			"Enter 'l' to list the chosen dice.\n"
+			"Enter 'h' to display this help message.\n"
+			"Enter 'q' to quit the program.\n";
 }
 
 void dice::print_invalid_input() {
 	cerr << "Your input could not be recognised.\n"
-			  "(enter 'h' for help)\n";
+			"(enter 'h' for help)\n";
 }
 
 void dice::print_cl_help() {
 	cout << "Usage:\n"
-			  "  dice: start with a d6\n"
-			  "  dice 3 4 5: start with a d3, a d4, and a d5\n"
-			  "  dice n1 n2 ...: start with a dn1, a dn2, ...\n"
-			  "\n"
-			  "Options:\n"
-			  "  [-h | --help]\n"
-			  "  [-v | --version]\n"
-			  "  [-1 | --once]: roll the dice once, then quit\n";
+			"  dice: start with a d6\n"
+			"  dice 3 4 5: start with a d3, a d4, and a d5\n"
+			"  dice n1 n2 ...: start with a dn1, a dn2, ...\n"
+			"\n"
+			"Options:\n"
+			"  [-h | --help]\n"
+			"  [-v | --version]\n"
+			"  [-1 | --once]: roll the dice once, then quit\n";
 }
 
 void dice::print_version() {
@@ -122,7 +122,7 @@ void dice::print_version() {
 
 void dice::print_invalid_clo(const std::string & str) {
 	cerr << "The command-line option '" << str << "' could not be recognised.\n"
-			  "(try 'dice --help' if you're stuck)\n";
+			"(try 'dice --help' if you're stuck)\n";
 }
 
 bool dice::read_die(const std::string & str, std::vector<Die> & dice) {
