@@ -4,6 +4,9 @@
 - Add '-rN' and '--rolls=N', for specifying how many times to roll the dice
    before exiting.
 - Remove '-1' and '--once'.
+- Add '-q'/'--quiet' and '-l'/'--loud'/'--verbose', for specifying how user-
+   friendly the output should be. (useful for shell piping)
+- Output prompt '>>> ' in interactive mode.
 
 ### v0.1 (2016-07-22)
 - Pad spaces before dice rolls so that output is always aligned in columns.

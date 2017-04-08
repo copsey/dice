@@ -42,9 +42,11 @@ namespace dice {
 	
 	/// Print the given dice roll and its sum.
 	///
+	/// If `verbose` is true, make the output more user-friendly.
+	///
 	/// Each `roll[i]` should be obtainable by rolling `dice[i]`.
 	/// Furthermore, `dice.size()` and `roll.size()` should be equal.
-	void print_dice_roll(const std::vector<Die> & dice, const std::vector<Die::result_type> & roll);
+	void print_dice_roll(const std::vector<Die> & dice, const std::vector<Die::result_type> & roll, bool verbose);
 	
 	/// Print help related to the interface within the program.
 	void print_program_help();

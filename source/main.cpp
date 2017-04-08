@@ -24,14 +24,15 @@ std::vector<Die::result_type> roll_dice(const std::vector<Die> & dice) {
 }
 
 /// Roll each of the given dice and print the result.
-void roll_dice_and_print(const std::vector<Die> & dice) {
+void roll_dice_and_print(const std::vector<Die> & dice, bool verbose) {
 	auto roll = roll_dice(dice);
-	print_dice_roll(dice, roll);
+	print_dice_roll(dice, roll, verbose);
 }
 
 int main(int arg_c, const char * arg_v[]) {
 	std::vector<Die> dice{};
 	int num_rolls = -1;
+	bool verbose = true;
 	
 	// process command-line input
 	{
@@ -50,6 +51,16 @@ int main(int arg_c, const char * arg_v[]) {
 				if (arg == "-v" || arg == "--version") {
 					print_version();
 					return 0;
+				}
+				
+				if (arg == "-q" || arg == "--quiet") {
+					verbose = false;
+					continue;
+				}
+				
+				if (arg=="-l" || arg=="--loud" || arg=="--verbose") {
+					verbose = true;
+					continue;
 				}
 				
 				{
@@ -110,26 +121,27 @@ int main(int arg_c, const char * arg_v[]) {
 	
 	if (dice.empty()) {
 		dice.emplace_back(6);
-		print_default_dice(dice);
+		if (verbose) print_default_dice(dice);
 	}
 	
 	seed();
 	
 	if (num_rolls != -1) {
-		for (int i = 0; i < num_rolls; ++i) roll_dice_and_print(dice);
+		for (int i = 0; i < num_rolls; ++i) roll_dice_and_print(dice, verbose);
 		return 0;
 	}
 	
-	roll_dice_and_print(dice);
+	roll_dice_and_print(dice, verbose);
 	
 	for (bool quit = false; !quit; ) {
 		std::string input;
+		std::cout << ">>> ";
 		std::getline(std::cin, input);
 		
 		auto commands = util::split_and_prune(input);
 		
 		if (commands.empty() || commands[0] == "r" || commands[0] == "roll") {
-			roll_dice_and_print(dice);
+			roll_dice_and_print(dice, verbose);
 		} else if (commands[0] == "q" || commands[0] == "quit" || commands[0] == "exit") {
 			quit = true;
 		} else if (commands[0] == "h" || commands[0] == "help") {
@@ -148,7 +160,7 @@ int main(int arg_c, const char * arg_v[]) {
 			
 			if (success) {
 				dice = std::move(new_dice);
-				roll_dice_and_print(dice);
+				roll_dice_and_print(dice, verbose);
 			}
 		} else {
 			print_invalid_input();

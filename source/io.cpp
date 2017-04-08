@@ -51,7 +51,7 @@ void dice::print_chosen_dice(const std::vector<Die> & dice) {
 	if (dice.empty()) {
 		cout << "(no dice chosen)\n";
 	} else {
-		cout << dice << '\n';
+		cout << dice << "\n";
 	}
 }
 
@@ -63,30 +63,39 @@ void dice::print_default_dice(const std::vector<Die> & dice) {
 	}
 }
 
-void dice::print_dice_roll(const std::vector<Die> & dice, const std::vector<Die::result_type> & roll) {
-	switch (roll.size()) {
-	 case 0:
-		cout << "0\n";
-		break;
-		
-	 case 1:
-		write_die_roll(dice[0], roll[0], cout);
-		cout << '\n';
-		break;
-		
-	 default: {
-		write_die_roll(dice[0], roll[0], cout);
-		
-		for (typename std::vector<Die>::size_type i = 1; i < dice.size(); ++i) {
-			cout << " + ";
-			write_die_roll(dice[i], roll[i], cout);
+void dice::print_dice_roll(const std::vector<Die> & dice, const std::vector<Die::result_type> & roll, bool verbose) {
+	if (verbose) {
+		switch (roll.size()) {
+		case 0:
+			cout << "0\n";
+			break;
+			
+		case 1:
+			write_die_roll(dice[0], roll[0], cout);
+			cout << "\n";
+			break;
+			
+		default:
+			{
+				write_die_roll(dice[0], roll[0], cout);
+				
+				for (typename std::vector<Die>::size_type i = 1; i < dice.size(); ++i) {
+					cout << " + ";
+					write_die_roll(dice[i], roll[i], cout);
+				}
+				
+				cout << " = ";
+				write_dice_roll_sum(dice, roll, cout);
+				cout << "\n";
+				break;
+			}
 		}
-		
-		cout << " = ";
-		write_dice_roll_sum(dice, roll, cout);
-		cout << '\n';
-		break;
-	 }
+	} else {
+		if (roll.size() > 0) {
+			cout << roll[0];
+			for (auto r = roll.begin() + 1; r != roll.end(); ++r) cout << " " << *r;
+			cout << "\n";
+		}
 	}
 }
 
@@ -113,7 +122,9 @@ void dice::print_cl_help() {
 			"Options:\n"
 			"  [-h | --help]\n"
 			"  [-v | --version]\n"
-			"  [-rN | --rolls=N]: roll the dice N times, then quit\n";
+			"  [-rN | --rolls=N]: roll the dice N times, then quit\n"
+			"  [-q | --quiet]: suppress basic output to just the rolls\n"
+			"  [-l | --loud | --verbose]: make output more user-friendly (default)\n";
 }
 
 void dice::print_version() {
