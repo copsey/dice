@@ -113,7 +113,7 @@ void dice::print_cl_help() {
 			"Options:\n"
 			"  [-h | --help]\n"
 			"  [-v | --version]\n"
-			"  [-1 | --once]: roll the dice once, then quit\n";
+			"  [-rN | --rolls=N]: roll the dice N times, then quit\n";
 }
 
 void dice::print_version() {

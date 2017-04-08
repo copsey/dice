@@ -1,4 +1,5 @@
 #include <iostream>
+#include <regex>
 #include <stdexcept>
 #include <string>
 #include <vector>
@@ -30,7 +31,7 @@ void roll_dice_and_print(const std::vector<Die> & dice) {
 
 int main(int arg_c, const char * arg_v[]) {
 	std::vector<Die> dice{};
-	bool quit = false;
+	int num_rolls = -1;
 	
 	// process command-line input
 	{
@@ -44,15 +45,49 @@ int main(int arg_c, const char * arg_v[]) {
 				if (arg == "-h" || arg == "--help") {
 					print_cl_help();
 					return 0;
-				} else if (arg == "-v" || arg == "--version") {
+				}
+				
+				if (arg == "-v" || arg == "--version") {
 					print_version();
 					return 0;
-				} else if (arg == "-1" || arg == "--once") {
-					quit = true;
-				} else {
-					print_invalid_clo(arg);
-					return 1;
 				}
+				
+				{
+					std::regex re{"(?:-r|--rolls=)(.*)"};
+					std::smatch m{};
+					
+					if (std::regex_match(arg, m, re)) {
+						int n;
+						std::string str = m[1].str();
+						
+						try {
+							n = util::to_i(str);
+						} catch (std::invalid_argument &) {
+							std::cerr << "Error: could not process option '" << arg << "'\n"
+								<< "The string '" << str << "' is not an integer!\n"
+								<< "(try 'dice --help' if you're stuck)\n";
+							return 1;
+						} catch (std::out_of_range &) {
+							std::cerr << "Error: could not process option '" << arg << "'\n"
+								<< "The number '" << str << "' is too big to store!\n"
+								<< "(try 'dice --help' if you're stuck)\n";
+							return 1;
+						}
+						
+						if (n < 0) {
+							std::cerr << "Error: could not process option '" << arg << "'\n"
+								<< "Cannot roll dice " << n << " times!\n"
+								<< "(try 'dice --help' if you're stuck)\n";
+							return 1;
+						}
+						
+						num_rolls = n;
+						continue;
+					}
+				}
+				
+				print_invalid_clo(arg);
+				return 1;
 			}
 		}
 		
@@ -80,9 +115,14 @@ int main(int arg_c, const char * arg_v[]) {
 	
 	seed();
 	
+	if (num_rolls != -1) {
+		for (int i = 0; i < num_rolls; ++i) roll_dice_and_print(dice);
+		return 0;
+	}
+	
 	roll_dice_and_print(dice);
 	
-	while (!quit) {
+	for (bool quit = false; !quit; ) {
 		std::string input;
 		std::getline(std::cin, input);
 		
