@@ -1,6 +1,6 @@
 # History
 
-### v0.2 (2017-04-08)
+### v0.2 (2017-04-16)
 - Add '-rN' and '--rolls=N', for specifying how many times to roll the dice
    before exiting.
 - Remove '-1' and '--once'.

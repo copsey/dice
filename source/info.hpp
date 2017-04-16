@@ -3,7 +3,7 @@
 
 namespace dice {
 	/// The current version of the program.
-	constexpr const char * version_c_str{"0.1"};
+	constexpr const char * version_c_str{"0.2"};
 }
 
 #endif
