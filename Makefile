@@ -16,6 +16,8 @@ $(objs): build/%.o: source/%.cpp
 	mkdir -p $(dir $@)
 	$(CXX) -c $(CXXFLAGS) $< -o $@
 
+build/io.o: source/info.hpp
+
 clean:
 	rm -f dice
 	rm -fr build/
