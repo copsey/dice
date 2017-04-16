@@ -7,6 +7,7 @@
 - Add '-q'/'--quiet' and '-l'/'--loud'/'--verbose', for specifying how user-
    friendly the output should be. (useful for shell piping)
 - Output prompt '>>> ' in interactive mode.
+- Replace scons with make.
 
 ### v0.1 (2016-07-22)
 - Pad spaces before dice rolls so that output is always aligned in columns.
