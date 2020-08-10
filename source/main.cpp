@@ -136,7 +136,11 @@ int main(int arg_c, const char * arg_v[]) {
 	for (bool quit = false; !quit; ) {
 		std::string input;
 		std::cout << ">>> ";
-		std::getline(std::cin, input);
+		
+		if (!std::getline(std::cin, input)) {
+			std::cout << std::endl;
+			break;
+		}
 		
 		auto commands = util::split_and_prune(input);
 		
