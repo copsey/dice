@@ -144,7 +144,7 @@ int main(int arg_c, const char * arg_v[]) {
 			roll_dice_and_print(dice, verbose);
 		} else if (commands[0] == "q" || commands[0] == "quit" || commands[0] == "exit") {
 			quit = true;
-		} else if (commands[0] == "h" || commands[0] == "help") {
+		} else if (commands[0] == "h" || commands[0] == "help" || commands[0] == "?") {
 			print_program_help();
 		} else if (commands[0] == "l" || commands[0] == "list") {
 			print_chosen_dice(dice);
