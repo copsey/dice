@@ -11,26 +11,38 @@
 #include "io.hpp"
 #include "random.hpp"
 
+using std::string;
+using std::vector;
+using std::move;
+using std::cin;
+using std::cout;
+using std::cerr;
+using std::getline;
+using std::endl;
+using std::regex;
+using std::regex_match;
+using std::smatch;
+
 using namespace dice;
 
 /// Roll each of the given dice.
 ///
 /// @returns a vector containing each roll, in the same order as the
 /// corresponding dice.
-std::vector<Die::result_type> roll_dice(const std::vector<Die> & dice) {
-	std::vector<Die::result_type> roll{};
+vector<Die::result_type> roll_dice(const vector<Die> & dice) {
+	vector<Die::result_type> roll{};
 	for (auto & d: dice) roll.push_back(d());
 	return roll;
 }
 
 /// Roll each of the given dice and print the result.
-void roll_dice_and_print(const std::vector<Die> & dice, bool verbose) {
+void roll_dice_and_print(const vector<Die> & dice, bool verbose) {
 	auto roll = roll_dice(dice);
 	print_dice_roll(dice, roll, verbose);
 }
 
 int main(int arg_c, const char * arg_v[]) {
-	std::vector<Die> dice{};
+	vector<Die> dice{};
 	int num_rolls = -1;
 	bool verbose = true;
 	
@@ -64,29 +76,29 @@ int main(int arg_c, const char * arg_v[]) {
 				}
 				
 				{
-					std::regex re{"(?:-r|--rolls=)(.*)"};
-					std::smatch m{};
+					regex re{"(?:-r|--rolls=)(.*)"};
+					smatch m{};
 					
-					if (std::regex_match(arg, m, re)) {
+					if (regex_match(arg, m, re)) {
 						int n;
-						std::string str = m[1].str();
+						string str = m[1].str();
 						
 						try {
 							n = util::to_i(str);
 						} catch (std::invalid_argument &) {
-							std::cerr << "Error: could not process option '" << arg << "'\n"
+							cerr << "Error: could not process option '" << arg << "'\n"
 								<< "The string '" << str << "' is not an integer!\n"
 								<< "(try 'dice --help' if you're stuck)\n";
 							return 1;
 						} catch (std::out_of_range &) {
-							std::cerr << "Error: could not process option '" << arg << "'\n"
+							cerr << "Error: could not process option '" << arg << "'\n"
 								<< "The number '" << str << "' is too big to store!\n"
 								<< "(try 'dice --help' if you're stuck)\n";
 							return 1;
 						}
 						
 						if (n < 0) {
-							std::cerr << "Error: could not process option '" << arg << "'\n"
+							cerr << "Error: could not process option '" << arg << "'\n"
 								<< "Cannot roll dice " << n << " times!\n"
 								<< "(try 'dice --help' if you're stuck)\n";
 							return 1;
@@ -114,7 +126,7 @@ int main(int arg_c, const char * arg_v[]) {
 		}
 		
 		if (!success) {
-			std::cerr << "(try 'dice --help' if you're stuck)\n";
+			cerr << "(try 'dice --help' if you're stuck)\n";
 			return 2;
 		}
 	}
@@ -134,11 +146,11 @@ int main(int arg_c, const char * arg_v[]) {
 	roll_dice_and_print(dice, verbose);
 	
 	for (bool quit = false; !quit; ) {
-		std::string input;
-		std::cout << ">>> ";
+		string input;
+		cout << ">>> ";
 		
-		if (!std::getline(std::cin, input)) {
-			std::cout << std::endl;
+		if (!getline(cin, input)) {
+			cout << endl;
 			break;
 		}
 		
@@ -153,7 +165,7 @@ int main(int arg_c, const char * arg_v[]) {
 		} else if (commands[0] == "l" || commands[0] == "list") {
 			print_chosen_dice(dice);
 		} else if (commands[0] == "c" || commands[0] == "choose") {
-			std::vector<Die> new_dice{};
+			vector<Die> new_dice{};
 			auto success = true;
 			
 			for (auto i = commands.begin() + 1; i != commands.end(); ++i) {
@@ -163,7 +175,7 @@ int main(int arg_c, const char * arg_v[]) {
 			}
 			
 			if (success) {
-				dice = std::move(new_dice);
+				dice = move(new_dice);
 				roll_dice_and_print(dice, verbose);
 			}
 		} else {

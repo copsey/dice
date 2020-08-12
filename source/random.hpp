@@ -6,7 +6,7 @@
 namespace dice {
 	/// A `mt19937` used as the random number engine when rolling dice.
 	///
-	/// This should be seeded at some point before use.
+	/// This needs to be seeded at some point before use.
 	extern std::mt19937 rand_eng;
 	
 	/// Seed `rand_eng` with a value from a `random_device`.

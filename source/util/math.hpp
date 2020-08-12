@@ -6,15 +6,10 @@ namespace dice {
 		/// Compute the number of digits that `x` has when written in base 10.
 		///
 		/// 0 is defined to have 0 digits, and the sign of `x` is ignored.
-		template <typename I>
-		I num_digits(I x) {
-			I n{0};
-			
-			while (x != 0) {
-				x /= 10;
-				++n;
-			}
-			
+		template <typename Integer>
+		Integer num_digits(Integer x) {
+			Integer n{0};
+			while (x != 0) { x /= 10; ++n; }
 			return n;
 		}
 	}
