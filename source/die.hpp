@@ -21,7 +21,7 @@ namespace dice {
 		 : dist{1, (n > 0) ? n : (throw bad_num_sides{n})} { }
 		 
 		/// The number of sides that the die has.
-		result_type num_sides() const {
+		result_type sides() const {
 			return dist.max();
 		}
 		

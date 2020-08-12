@@ -7,14 +7,17 @@
 #include "info.hpp"
 #include "io.hpp"
 
+using std::vector;
+using std::string;
+using std::ostream;
 using std::cout;
 using std::cerr;
 
-std::ostream & dice::operator<<(std::ostream & os, const Die & d) {
-	return os << 'd' << d.num_sides();
+ostream & dice::operator<<(ostream & os, const Die & d) {
+	return os << 'd' << d.sides();
 }
 
-std::ostream & dice::operator<<(std::ostream & os, const std::vector<Die> & dice) {
+ostream & dice::operator<<(ostream & os, const vector<Die> & dice) {
 	if (!dice.empty()) {
 		os << dice.front();
 		for (auto i = dice.begin() + 1; i != dice.end(); ++i) {
@@ -25,8 +28,8 @@ std::ostream & dice::operator<<(std::ostream & os, const std::vector<Die> & dice
 	return os;
 }
 
-void dice::write_die_roll(const Die & d, Die::result_type r, std::ostream & os) {
-	auto max_r = d.num_sides();
+void dice::write_die_roll(const Die & d, Die::result_type r, ostream & os) {
+	auto max_r = d.sides();
 	
 	auto str = std::to_string(r);
 	auto len = util::num_digits(max_r);
@@ -35,10 +38,10 @@ void dice::write_die_roll(const Die & d, Die::result_type r, std::ostream & os) 
 	os << str;
 }
 
-void dice::write_dice_roll_sum(const std::vector<Die> & dice, const std::vector<Die::result_type> & roll, std::ostream & os) {
+void dice::write_dice_roll_sum(const vector<Die> & dice, const vector<Die::result_type> & roll, ostream & os) {
 	auto sum = util::sum(roll);
 	Die::result_type max_sum = 0;
-	for (auto & d: dice) max_sum += d.num_sides();
+	for (auto & d: dice) max_sum += d.sides();
 	
 	auto str = std::to_string(sum);
 	auto len = util::num_digits(max_sum);
@@ -47,7 +50,7 @@ void dice::write_dice_roll_sum(const std::vector<Die> & dice, const std::vector<
 	os << str;
 }
 
-void dice::print_chosen_dice(const std::vector<Die> & dice) {
+void dice::print_chosen_dice(const vector<Die> & dice) {
 	if (dice.empty()) {
 		cout << "(no dice chosen)\n";
 	} else {
@@ -55,7 +58,7 @@ void dice::print_chosen_dice(const std::vector<Die> & dice) {
 	}
 }
 
-void dice::print_default_dice(const std::vector<Die> & dice) {
+void dice::print_default_dice(const vector<Die> & dice) {
 	if (dice.empty()) {
 		cout << "(default choice: no dice)\n";
 	} else {
@@ -63,7 +66,7 @@ void dice::print_default_dice(const std::vector<Die> & dice) {
 	}
 }
 
-void dice::print_dice_roll(const std::vector<Die> & dice, const std::vector<Die::result_type> & roll, bool verbose) {
+void dice::print_dice_roll(const vector<Die> & dice, const vector<Die::result_type> & roll, bool verbose) {
 	if (verbose) {
 		switch (roll.size()) {
 		case 0:
@@ -79,7 +82,7 @@ void dice::print_dice_roll(const std::vector<Die> & dice, const std::vector<Die:
 			{
 				write_die_roll(dice[0], roll[0], cout);
 				
-				for (typename std::vector<Die>::size_type i = 1; i < dice.size(); ++i) {
+				for (typename vector<Die>::size_type i = 1; i < dice.size(); ++i) {
 					cout << " + ";
 					write_die_roll(dice[i], roll[i], cout);
 				}
@@ -131,12 +134,12 @@ void dice::print_version() {
 	cout << "dice v" << version_c_str << "\n";
 }
 
-void dice::print_invalid_clo(const std::string & str) {
+void dice::print_invalid_clo(const string & str) {
 	cerr << "The command-line option '" << str << "' could not be recognised.\n"
 			"(try 'dice --help' if you're stuck)\n";
 }
 
-bool dice::read_die(const std::string & str, std::vector<Die> & dice) {
+bool dice::read_die(const string & str, vector<Die> & dice) {
 	auto success = true;
 	
 	try {
