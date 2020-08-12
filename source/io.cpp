@@ -13,26 +13,27 @@ using std::ostream;
 using std::cout;
 using std::cerr;
 
+using namespace dice;
+
 ostream & dice::operator<<(ostream & os, const Die & d) {
 	return os << 'd' << d.sides();
 }
 
 ostream & dice::operator<<(ostream & os, const vector<Die> & dice) {
-	if (!dice.empty()) {
-		os << dice.front();
-		for (auto i = dice.begin() + 1; i != dice.end(); ++i) {
-			os << ' ' << *i;
-		}
+	if (dice.empty()) return os;
+
+	os << dice.front();
+	for (auto i = dice.begin() + 1; i != dice.end(); ++i) {
+		os << ' ' << *i;
 	}
-	
 	return os;
 }
 
-void dice::write_die_roll(const Die & d, Die::result_type r, ostream & os) {
-	auto max_r = d.sides();
+void dice::write_die_roll(const Die & d, Die::result_type roll, ostream & os) {
+	auto max_roll = d.sides();
 	
-	auto str = std::to_string(r);
-	auto len = util::num_digits(max_r);
+	auto str = std::to_string(roll);
+	auto len = util::num_digits(max_roll);
 	util::pad_front(str, ' ', len);
 	
 	os << str;
@@ -140,18 +141,16 @@ void dice::print_invalid_clo(const string & str) {
 }
 
 bool dice::read_die(const string & str, vector<Die> & dice) {
-	auto success = true;
+	auto success = false;
 	
 	try {
 		dice.emplace_back(util::to_i(str));
+		success = true;
 	} catch (std::invalid_argument &) {
-		success = false;
 		cerr << "Error: the string '" << str << "' is not an integer!\n";
 	} catch (std::out_of_range &) {
-		success = false;
 		cerr << "Error: the number '" << str << "' is too big to store!\n";
 	} catch (Die::bad_num_sides & ex) {
-		success = false;
 		cerr << "Error: a die with " << ex.n << " sides cannot be created!\n";
 	}
 	
