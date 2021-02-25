@@ -118,17 +118,19 @@ void dice::print_invalid_input() {
 }
 
 void dice::print_cl_help() {
-	cout << "Usage:\n"
-			"  dice: start with a d6\n"
-			"  dice 3 4 5: start with a d3, a d4, and a d5\n"
-			"  dice n1 n2 ...: start with a dn1, a dn2, ...\n"
+	cout << "Usage: dice [options] [<number-of-sides>...]\n"
 			"\n"
 			"Options:\n"
-			"  [-h | --help]\n"
-			"  [-v | --version]\n"
-			"  [-rN | --rolls=N]: roll the dice N times, then quit\n"
-			"  [-q | --quiet]: suppress basic output to just the rolls\n"
-			"  [-l | --loud | --verbose]: make output more user-friendly (default)\n";
+			"  [-? | --help]: print this help message, then quit\n"
+			"  [-# | --version]: print the version of this program, then quit\n"
+			"  [-q | --quiet]: suppress output to just the rolls\n"
+			"  [-v | --verbose]: show extra information (default)\n"
+			"  [--rolls=N]: roll the dice N times, then quit\n"
+			"\n"
+			"Examples:\n"
+			"  dice: start with a d6\n"
+			"  dice 6 6: start with two d6's\n"
+			"  dice 20: start with a d20\n";
 }
 
 void dice::print_version() {

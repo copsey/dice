@@ -55,12 +55,12 @@ int main(int arg_c, const char * arg_v[]) {
 			auto & arg = args[i];
 			
 			if (util::is_clo(arg)) {
-				if (arg == "-h" || arg == "--help") {
+				if (arg == "-?" || arg == "--help") {
 					print_cl_help();
 					return 0;
 				}
 				
-				if (arg == "-v" || arg == "--version") {
+				if (arg == "-#" || arg == "--version") {
 					print_version();
 					return 0;
 				}
@@ -70,7 +70,7 @@ int main(int arg_c, const char * arg_v[]) {
 					continue;
 				}
 				
-				if (arg=="-l" || arg=="--loud" || arg=="--verbose") {
+				if (arg=="-v" || arg=="--verbose") {
 					verbose = true;
 					continue;
 				}
