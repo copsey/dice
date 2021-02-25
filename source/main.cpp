@@ -76,7 +76,7 @@ int main(int arg_c, const char * arg_v[]) {
 				}
 				
 				{
-					regex re{"(?:-r|--rolls=)(.*)"};
+					regex re{"(?:--rolls=)(.*)"};
 					smatch m{};
 					
 					if (regex_match(arg, m, re)) {
