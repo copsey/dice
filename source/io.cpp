@@ -1,4 +1,5 @@
 #include <iostream>
+#include <limits>
 
 #include "util/math.hpp"
 #include "util/numeric.hpp"
@@ -12,6 +13,8 @@ using std::string;
 using std::ostream;
 using std::cout;
 using std::cerr;
+
+using int_limits = std::numeric_limits<int>;
 
 using namespace dice;
 
@@ -114,18 +117,18 @@ void dice::print_program_help() {
 
 void dice::print_invalid_input() {
 	cerr << "Your input could not be recognised.\n"
-			"(enter 'h' for help)\n";
+			"Enter 'h' for help.\n";
 }
 
 void dice::print_cl_help() {
-	cout << "Usage: dice [options] [<number-of-sides>...]\n"
+	cout << "Usage: dice [options] [<number-of-sides> ...]\n"
 			"\n"
 			"Options:\n"
-			"  [-? | --help]: print this help message, then quit\n"
-			"  [-# | --version]: print the version of this program, then quit\n"
-			"  [-q | --quiet]: suppress output to just the rolls\n"
-			"  [-v | --verbose]: show extra information (default)\n"
-			"  [--rolls=N]: roll the dice N times, then quit\n"
+			"  [-? | --help]         print this help message, then quit\n"
+			"  [-# | --version]      print the version of this program, then quit\n"
+			"  [-q | --quiet]        suppress output to just the rolls\n"
+			"  [-v | --verbose]      show extra information (default)\n"
+			"  [--rolls=N]           roll the dice N times, then quit\n"
 			"\n"
 			"Examples:\n"
 			"  dice: start with a d6\n"
@@ -139,8 +142,8 @@ void dice::print_version() {
 }
 
 void dice::print_invalid_clo(const string & str) {
-	cerr << "The command-line option '" << str << "' could not be recognised.\n"
-			"(try 'dice --help' if you're stuck)\n";
+	cerr << str << " is not a valid option.\n"
+		<< "Use \"dice --help\" to see a list of all available options.\n";
 }
 
 bool dice::read_die(const string & str, vector<Die> & dice) {
@@ -150,11 +153,12 @@ bool dice::read_die(const string & str, vector<Die> & dice) {
 		dice.emplace_back(util::to_i(str));
 		success = true;
 	} catch (std::invalid_argument &) {
-		cerr << "Error: the string '" << str << "' is not an integer!\n";
+		cerr << "'" << str << "' is not an integer.\n";
 	} catch (std::out_of_range &) {
-		cerr << "Error: the number '" << str << "' is too big to store!\n";
+		cerr << str << " is too many sides for a die. Maximum number of sides is "
+			<< int_limits::max() << ".\n";
 	} catch (Die::bad_num_sides & ex) {
-		cerr << "Error: a die with " << ex.n << " sides cannot be created!\n";
+		cerr << "Expected zero or more sides, got " << ex.n << ".\n";
 	}
 	
 	return success;

@@ -1,4 +1,5 @@
 #include <iostream>
+#include <limits>
 #include <regex>
 #include <stdexcept>
 #include <string>
@@ -22,6 +23,8 @@ using std::endl;
 using std::regex;
 using std::regex_match;
 using std::smatch;
+
+using int_limits = std::numeric_limits<int>;
 
 using namespace dice;
 
@@ -86,21 +89,24 @@ int main(int arg_c, const char * arg_v[]) {
 						try {
 							n = util::to_i(str);
 						} catch (std::invalid_argument &) {
-							cerr << "Error: could not process option '" << arg << "'\n"
-								<< "The string '" << str << "' is not an integer!\n"
-								<< "(try 'dice --help' if you're stuck)\n";
+							cerr << "'" << str << "' is not an integer.\n"
+								<< "\n"
+								<< "This error was caused by " << arg << ".\n"
+								<< "Use \"dice --help\" for a description of the options.\n";
 							return 1;
 						} catch (std::out_of_range &) {
-							cerr << "Error: could not process option '" << arg << "'\n"
-								<< "The number '" << str << "' is too big to store!\n"
-								<< "(try 'dice --help' if you're stuck)\n";
+							cerr << "Maximum number of rolls is " << int_limits::max() << ".\n"
+								<< "\n"
+								<< "This error was caused by " << arg << ".\n"
+								<< "Use \"dice --help\" for a description of the options.\n";
 							return 1;
 						}
 						
 						if (n < 0) {
-							cerr << "Error: could not process option '" << arg << "'\n"
-								<< "Cannot roll dice " << n << " times!\n"
-								<< "(try 'dice --help' if you're stuck)\n";
+							cerr << "Expected zero or more rolls, got " << n << ".\n"
+								<< "\n"
+								<< "This error was caused by " << arg << ".\n"
+								<< "Use \"dice --help\" for a description of the options.\n";
 							return 1;
 						}
 						
@@ -126,7 +132,7 @@ int main(int arg_c, const char * arg_v[]) {
 		}
 		
 		if (!success) {
-			cerr << "(try 'dice --help' if you're stuck)\n";
+			cerr << "Try \"dice --help\" for some example uses.\n";
 			return 2;
 		}
 	}
