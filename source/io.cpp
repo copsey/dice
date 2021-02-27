@@ -137,7 +137,7 @@ void dice::print_cl_help() {
 }
 
 void dice::print_version() {
-	cout << "dice v" << version_c_str << "\n";
+	cout << "dice " << version_c_str << "\n";
 	cout << "Copyright (c) 2016-2021 Jack Copsey\n";
 }
 
