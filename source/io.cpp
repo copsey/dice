@@ -120,8 +120,8 @@ void dice::print_invalid_input() {
 			"Enter 'h' for help.\n";
 }
 
-void dice::print_cl_help() {
-	cout << "Usage: dice [options] [<number-of-sides> ...]\n"
+void dice::print_cl_help(string const& basename) {
+	cout << "Usage: " << basename << " [options] [<number-of-sides> ...]\n"
 			"\n"
 			"Options:\n"
 			"  [-? | --help]         print this help message, then quit\n"
@@ -131,9 +131,9 @@ void dice::print_cl_help() {
 			"  [--rolls=N]           roll the dice N times, then quit\n"
 			"\n"
 			"Examples:\n"
-			"  dice                  start with a d6\n"
-			"  dice 6 6              start with two d6's\n"
-			"  dice 20               start with a d20\n";
+			"  " << basename << "                  start with a d6\n"
+			"  " << basename << " 6 6              start with two d6's\n"
+			"  " << basename << " 20               start with a d20\n";
 }
 
 void dice::print_version() {
@@ -141,9 +141,9 @@ void dice::print_version() {
 	cout << "Copyright (c) 2016-2021 Jack Copsey\n";
 }
 
-void dice::print_invalid_clo(const string & str) {
+void dice::print_invalid_clo(string const& str, string const& basename) {
 	cerr << str << " is not a valid option.\n"
-		<< "Use \"dice --help\" to see a list of all available options.\n";
+		<< "Use \"" << basename << " --help\" to see a list of all available options.\n";
 }
 
 bool dice::read_die(const string & str, vector<Die> & dice) {

@@ -52,6 +52,7 @@ int main(int arg_c, const char * arg_v[]) {
 	// process command-line input
 	{
 		auto args = util::encapsulate_args(arg_c, arg_v);
+		string basename = args[0];
 		
 		// process command-line options
 		for (int i = 1; i < arg_c; ++i) {
@@ -59,7 +60,7 @@ int main(int arg_c, const char * arg_v[]) {
 			
 			if (util::is_clo(arg)) {
 				if (arg == "-?" || arg == "--help") {
-					print_cl_help();
+					print_cl_help(basename);
 					return 0;
 				}
 				
@@ -92,13 +93,13 @@ int main(int arg_c, const char * arg_v[]) {
 							cerr << "'" << str << "' is not an integer.\n"
 								<< "\n"
 								<< "This error was caused by " << arg << ".\n"
-								<< "Use \"dice --help\" for a description of the options.\n";
+								<< "Use \"" << basename << " --help\" for a description of the options.\n";
 							return 1;
 						} catch (std::out_of_range &) {
 							cerr << "Maximum number of rolls is " << int_limits::max() << ".\n"
 								<< "\n"
 								<< "This error was caused by " << arg << ".\n"
-								<< "Use \"dice --help\" for a description of the options.\n";
+								<< "Use \"" << basename << " --help\" for a description of the options.\n";
 							return 1;
 						}
 						
@@ -106,7 +107,7 @@ int main(int arg_c, const char * arg_v[]) {
 							cerr << "Expected zero or more rolls, got " << n << ".\n"
 								<< "\n"
 								<< "This error was caused by " << arg << ".\n"
-								<< "Use \"dice --help\" for a description of the options.\n";
+								<< "Use \"" << basename << " --help\" for a description of the options.\n";
 							return 1;
 						}
 						
@@ -115,7 +116,7 @@ int main(int arg_c, const char * arg_v[]) {
 					}
 				}
 				
-				print_invalid_clo(arg);
+				print_invalid_clo(arg, basename);
 				return 1;
 			}
 		}
@@ -132,7 +133,7 @@ int main(int arg_c, const char * arg_v[]) {
 		}
 		
 		if (!success) {
-			cerr << "Try \"dice --help\" for some example uses.\n";
+			cerr << "Try \"" << basename << " --help\" for some example uses.\n";
 			return 2;
 		}
 	}

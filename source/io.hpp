@@ -52,7 +52,7 @@ namespace dice {
 	void print_program_help();
 	
 	/// Print help related to the command-line interface.
-	void print_cl_help();
+	void print_cl_help(std::string const& basename);
 	
 	/// Print the version of the program.
 	void print_version();
@@ -63,7 +63,7 @@ namespace dice {
 	
 	/// Print an error message indicating that `str` is not a command-line
 	/// option.
-	void print_invalid_clo(const std::string & str);
+	void print_invalid_clo(std::string const& str, std::string const& basename);
 	
 	/// Convert `str` to an `int` and append a new die to the end of `dice` with
 	/// that many sides.
