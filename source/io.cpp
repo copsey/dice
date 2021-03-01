@@ -131,9 +131,9 @@ void dice::print_cl_help() {
 			"  [--rolls=N]           roll the dice N times, then quit\n"
 			"\n"
 			"Examples:\n"
-			"  dice: start with a d6\n"
-			"  dice 6 6: start with two d6's\n"
-			"  dice 20: start with a d20\n";
+			"  dice                  start with a d6\n"
+			"  dice 6 6              start with two d6's\n"
+			"  dice 20               start with a d20\n";
 }
 
 void dice::print_version() {
