@@ -121,19 +121,20 @@ void dice::print_invalid_input() {
 }
 
 void dice::print_cl_help(string const& basename) {
-	cout << "Usage: " << basename << " [options] [<number-of-sides> ...]\n"
+	cout << "Usage: " << basename << " [<options>] [<number-of-sides> ...]\n"
 			"\n"
 			"Options:\n"
-			"  [-? | --help]         print this help message, then quit\n"
-			"  [-# | --version]      print the version of this program, then quit\n"
-			"  [-q | --quiet]        suppress output to just the rolls\n"
-			"  [-v | --verbose]      show extra information (default)\n"
-			"  [--rolls=N]           roll the dice N times, then quit\n"
+			"  [-? | --help]         Print this help message, then quit.\n"
+			"  [-# | --version]      Print the version of this program, then quit.\n"
+			"  [-q | --quiet]        Suppress output to just the rolls.\n"
+			"  [-v | --verbose]      Show the totals of the rolls and other information\n"
+			"                        (default).\n"
+			"  [--rolls=<N>]         Roll the dice <N> times, then quit.\n"
 			"\n"
 			"Examples:\n"
-			"  " << basename << "                  start with a d6\n"
-			"  " << basename << " 6 6              start with two d6's\n"
-			"  " << basename << " 20               start with a d20\n";
+			"  " << basename << "                  Start with a d6.\n"
+			"  " << basename << " 6 6              Start with two d6's.\n"
+			"  " << basename << " 20               Start with a d20.\n";
 }
 
 void dice::print_version() {
