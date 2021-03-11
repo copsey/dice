@@ -162,7 +162,7 @@ bool dice::read_die(string_view str, vector<Die> & dice) {
 		cerr << str << " is too many sides for a die. Maximum number of sides is "
 			<< int_limits::max() << ".\n";
 	} catch (Die::bad_num_sides & ex) {
-		cerr << "Expected zero or more sides, got " << ex.n << ".\n";
+		cerr << "Expected one or more sides, got " << ex.n << ".\n";
 	}
 	
 	return success;
