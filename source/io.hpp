@@ -2,17 +2,23 @@
 #define DICE_IO
 
 #include <ostream>
+#include <regex>
 #include <string>
+#include <string_view>
 #include <vector>
 
 #include "die.hpp"
 
 namespace dice {
+	/// A regular expression to parse the number of dice rolls specified
+	/// at the command line.
+	inline auto const rolls_option_regex = std::regex{"(?:--rolls=)(.*)"};
+
 	/// Write "dN" to `os`, where N is the number of sides of `d`.
-	std::ostream & operator<<(std::ostream & os, const Die & d);
+	std::ostream & operator<<(std::ostream & os, Die const& d);
 	
 	/// Write `dice` to `os` as a list in the form "dn1 dn2 ...".
-	std::ostream & operator<<(std::ostream & os, const std::vector<Die> & dice);
+	std::ostream & operator<<(std::ostream & os, std::vector<Die> const& dice);
 	
 	/// Write the die roll `r` obtained from `d` to `os`.
 	///
@@ -21,7 +27,7 @@ namespace dice {
 	/// output regardless of which value `r` takes.
 	///
 	/// `r` should be a valid roll, i.e. obtainable by rolling `d`.
-	void write_die_roll(const Die & d, Die::result_type r, std::ostream & os);
+	void write_die_roll(Die const& d, Die::result_type r, std::ostream & os);
 	
 	/// Write the sum of the dice rolls in `roll` to `os`.
 	///
@@ -32,13 +38,13 @@ namespace dice {
 	///
 	/// Each `roll[i]` should be obtainable by rolling `dice[i]`.
 	/// Furthermore, `dice.size()` and `roll.size()` should be equal.
-	void write_dice_roll_sum(const std::vector<Die> & dice, const std::vector<Die::result_type> & roll, std::ostream & os);
+	void write_dice_roll_sum(std::vector<Die> const& dice, std::vector<Die::result_type> const& roll, std::ostream & os);
 	
 	/// Print the chosen set of dice.
-	void print_chosen_dice(const std::vector<Die> & dice);
+	void print_chosen_dice(std::vector<Die> const& dice);
 	
 	/// Print the default set of dice.
-	void print_default_dice(const std::vector<Die> & dice);
+	void print_default_dice(std::vector<Die> const& dice, bool verbose);
 	
 	/// Print the given dice roll and its sum.
 	///
@@ -46,13 +52,13 @@ namespace dice {
 	///
 	/// Each `roll[i]` should be obtainable by rolling `dice[i]`.
 	/// Furthermore, `dice.size()` and `roll.size()` should be equal.
-	void print_dice_roll(const std::vector<Die> & dice, const std::vector<Die::result_type> & roll, bool verbose);
+	void print_dice_roll(std::vector<Die> const& dice, std::vector<Die::result_type> const& roll, bool verbose);
 	
 	/// Print help related to the interface within the program.
 	void print_program_help();
 	
 	/// Print help related to the command-line interface.
-	void print_cl_help(std::string const& basename);
+	void print_cl_help(std::string_view basename);
 	
 	/// Print the version of the program.
 	void print_version();
@@ -63,7 +69,7 @@ namespace dice {
 	
 	/// Print an error message indicating that `str` is not a command-line
 	/// option.
-	void print_invalid_clo(std::string const& str, std::string const& basename);
+	void print_invalid_clo(std::string_view str, std::string_view basename);
 	
 	/// Convert `str` to an `int` and append a new die to the end of `dice` with
 	/// that many sides.
@@ -72,7 +78,7 @@ namespace dice {
 	/// `dice` remains in the same state as before the function was called.
 	///
 	/// @returns whether the function succeeded.
-	bool read_die(const std::string & str, std::vector<Die> & dice);
+	bool read_die(std::string_view str, std::vector<Die> & dice);
 }
 
 #endif

@@ -2,6 +2,7 @@
 #define DICE_UTIL_STRING
 
 #include <string>
+#include <string_view>
 #include <vector>
 
 namespace dice {
@@ -10,14 +11,14 @@ namespace dice {
 		/// by whitespace in `str`.
 		///
 		/// Empty substrings are automatically removed.
-		std::vector<std::string> split_and_prune(const std::string & str);
+		std::vector<std::string_view> split_and_prune(std::string_view str);
 		
 		/// Convert `str` into an `int`, using the given numeric base.
 		///
 		/// In addition to throwing the same exceptions as
 		/// `std::stoi(str, 0, base)`, a `std::invalid_argument` is thrown if some
 		/// unexpected superfluous `char`s were encountered at the end of `str`.
-		int to_i(const std::string & str, int base = 10);
+		int to_i(std::string_view str, int base = 10);
 		
 		/// Insert copies of `ch` at the front of `str` until its length is at
 		/// least `min_l`.
