@@ -4,7 +4,6 @@ src = \
 	die.cpp \
 	io.cpp \
 	main.cpp \
-	util/cli.cpp \
 	util/string.cpp
 objs = $(addprefix build/,$(src:.cpp=.o))
  
