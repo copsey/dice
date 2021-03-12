@@ -11,9 +11,11 @@
 #include "die.hpp"
 
 namespace dice {
-	/// A regular expression to parse the number of dice rolls specified
-	/// at the command line.
-	inline auto const rolls_option_regex = std::regex{"(?:--rolls=)(.*)"};
+	namespace regex {
+		/// A regular expression to parse the number of dice rolls specified
+		/// at the command line.
+		inline auto const rolls_option = std::regex{"(?:--rolls=)(.*)"};
+	}
 
 	/// Write "dN" to `os`, where N is the number of sides of `d`.
 	inline std::ostream & operator<< (std::ostream & os, die const& d) {

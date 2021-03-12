@@ -67,7 +67,7 @@ int process_options(vector<string_view> const& args,
 			verbose = false;
 		} else if (arg=="-v" || arg=="--verbose") {
 			verbose = true;
-		} else if (sv_match match; regex_match(arg, match, rolls_option_regex)) {
+		} else if (sv_match match; regex_match(arg, match, regex::rolls_option)) {
 			auto str = as_string_view(match[1]);
 			auto success = read_num_rolls(str, num_rolls, arg, basename);
 

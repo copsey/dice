@@ -11,6 +11,12 @@ namespace dice {
         using sv_match = std::match_results<std::string_view::const_iterator>;
 		using sv_sub_match = std::sub_match<std::string_view::const_iterator>;
 
+        inline bool regex_match(std::string_view sv, std::regex const& e,
+            std::regex_constants::match_flag_type flags = std::regex_constants::match_default)
+        {
+            return std::regex_match(sv.begin(), sv.end(), e, flags);
+        }
+
         inline bool regex_match(std::string_view sv, sv_match & m, std::regex const& e,
             std::regex_constants::match_flag_type flags = std::regex_constants::match_default)
         {
