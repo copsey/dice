@@ -1,10 +1,9 @@
 CXXFLAGS = -std=c++17 -O2
 
 src = \
-	die.cpp \
+	util/string.cpp \
 	io.cpp \
-	main.cpp \
-	util/string.cpp
+	main.cpp
 objs = $(addprefix build/,$(src:.cpp=.o))
  
 dice: $(objs)

@@ -11,7 +11,6 @@
 
 #include "die.hpp"
 #include "io.hpp"
-#include "random.hpp"
 
 using std::cin;
 using std::cout;
