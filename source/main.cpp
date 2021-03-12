@@ -30,14 +30,14 @@ using namespace dice::util;
 ///
 /// @returns a vector containing each roll, in the same order as the
 /// corresponding dice.
-vector<Die::result_type> roll_dice(vector<Die> const& dice) {
-	vector<Die::result_type> roll;
-	for (auto & d: dice) roll.push_back(d());
+vector<die::result_type> roll_dice(vector<die> const& dice) {
+	vector<die::result_type> roll;
+	for (auto & d : dice) roll.push_back(d());
 	return roll;
 }
 
 /// Roll each of the given dice and print the result.
-void roll_dice_and_print(vector<Die> const& dice, bool verbose) {
+void roll_dice_and_print(vector<die> const& dice, bool verbose) {
 	auto roll = roll_dice(dice);
 	print_dice_roll(dice, roll, verbose);
 }
@@ -83,7 +83,7 @@ int process_options(vector<string_view> const& args,
 }
 
 /// Read the initial choice of dice. Any options are ignored.
-int process_choice_of_dice(vector<string_view> const& args, vector<Die> & dice) {
+int process_choice_of_dice(vector<string_view> const& args, vector<die> & dice) {
 	int status = 0;
 	string_view basename = args[0];
 	
@@ -100,7 +100,7 @@ int process_choice_of_dice(vector<string_view> const& args, vector<Die> & dice) 
 }
 
 /// Process user input during interactive mode.
-void handle_input(string_view input, vector<Die> & dice, bool & quit, bool verbose) {
+void handle_input(string_view input, vector<die> & dice, bool & quit, bool verbose) {
 	auto commands = split_and_prune(input);
 	
 	if (commands.empty() || commands[0] == "r" || commands[0] == "roll") {
@@ -112,7 +112,7 @@ void handle_input(string_view input, vector<Die> & dice, bool & quit, bool verbo
 	} else if (commands[0] == "l" || commands[0] == "list") {
 		print_chosen_dice(dice);
 	} else if (commands[0] == "c" || commands[0] == "choose") {
-		vector<Die> new_dice;
+		vector<die> new_dice;
 		bool success = true;
 		
 		for (auto i = commands.begin() + 1; i != commands.end(); ++i) {
@@ -131,7 +131,7 @@ void handle_input(string_view input, vector<Die> & dice, bool & quit, bool verbo
 }
 
 int main(int arg_c, char const* arg_v[]) {
-	vector<Die> dice;
+	vector<die> dice;
 	optional_int num_rolls;
 	bool quit = false;
 	bool verbose = true;

@@ -4,7 +4,7 @@
 #include "random.hpp"
 
 namespace dice {
-	struct Die {
+	struct die {
 		/// The type of value returned when the die is rolled.
 		using result_type = int;
 		
@@ -12,12 +12,12 @@ namespace dice {
 		struct bad_num_sides { result_type n; };
 		
 		/// Construct a six-sided die.
-		Die() = default;
+		die() = default;
 		
 		/// Construct an `n`-sided die.
 		///
 		/// @throws `bad_num_sides` if `n` is less than 1.
-		Die(result_type n) :
+		die(result_type n) :
 			dist{1, (n > 0) ? n : throw bad_num_sides{n}}
 		{ }
 		 

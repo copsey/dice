@@ -16,12 +16,12 @@ namespace dice {
 	inline auto const rolls_option_regex = std::regex{"(?:--rolls=)(.*)"};
 
 	/// Write "dN" to `os`, where N is the number of sides of `d`.
-	inline std::ostream & operator<< (std::ostream & os, Die const& d) {
+	inline std::ostream & operator<< (std::ostream & os, die const& d) {
 		return os << 'd' << d.sides();
 	}
 	
 	/// Write `dice` to `os` as a list in the form "dn1 dn2 ...".
-	std::ostream & operator<< (std::ostream & os, std::vector<Die> const& dice);
+	std::ostream & operator<< (std::ostream & os, std::vector<die> const& dice);
 	
 	/// Write the die roll `r` obtained from `d` to `os`.
 	///
@@ -30,7 +30,7 @@ namespace dice {
 	/// output regardless of which value `r` takes.
 	///
 	/// `r` should be a valid roll, i.e. obtainable by rolling `d`.
-	void write_die_roll(Die const& d, Die::result_type r, std::ostream & os);
+	void write_die_roll(die const& d, die::result_type r, std::ostream & os);
 	
 	/// Write the sum of the dice rolls in `roll` to `os`.
 	///
@@ -41,13 +41,13 @@ namespace dice {
 	///
 	/// Each `roll[i]` should be obtainable by rolling `dice[i]`.
 	/// Furthermore, `dice.size()` and `roll.size()` should be equal.
-	void write_dice_roll_sum(std::vector<Die> const& dice, std::vector<Die::result_type> const& roll, std::ostream & os);
+	void write_dice_roll_sum(std::vector<die> const& dice, std::vector<die::result_type> const& roll, std::ostream & os);
 	
 	/// Print the chosen set of dice.
-	void print_chosen_dice(std::vector<Die> const& dice);
+	void print_chosen_dice(std::vector<die> const& dice);
 	
 	/// Print the default set of dice.
-	void print_default_dice(std::vector<Die> const& dice, bool verbose);
+	void print_default_dice(std::vector<die> const& dice, bool verbose);
 	
 	/// Print the given dice roll and its sum.
 	///
@@ -55,7 +55,7 @@ namespace dice {
 	///
 	/// Each `roll[i]` should be obtainable by rolling `dice[i]`.
 	/// Furthermore, `dice.size()` and `roll.size()` should be equal.
-	void print_dice_roll(std::vector<Die> const& dice, std::vector<Die::result_type> const& roll, bool verbose);
+	void print_dice_roll(std::vector<die> const& dice, std::vector<die::result_type> const& roll, bool verbose);
 	
 	/// Print help related to the interface within the program.
 	void print_program_help();
@@ -85,7 +85,7 @@ namespace dice {
 	/// `dice` remains in the same state as before the function was called.
 	///
 	/// @returns whether the function succeeded.
-	bool read_die(std::string_view str, std::vector<Die> & dice);
+	bool read_die(std::string_view str, std::vector<die> & dice);
 
 	/// Convert `str` to an integer and treat this as the number of times to
 	/// roll the dice before quitting the program.

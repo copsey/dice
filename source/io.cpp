@@ -20,7 +20,7 @@ using optional_int = std::optional<int>;
 
 using namespace dice;
 
-ostream & dice::operator<< (ostream & os, vector<Die> const& dice) {
+ostream & dice::operator<< (ostream & os, vector<die> const& dice) {
 	if (dice.empty()) return os;
 
 	os << dice.front();
@@ -30,7 +30,7 @@ ostream & dice::operator<< (ostream & os, vector<Die> const& dice) {
 	return os;
 }
 
-void dice::write_die_roll(Die const& d, Die::result_type roll, ostream & os) {
+void dice::write_die_roll(die const& d, die::result_type roll, ostream & os) {
 	auto max_roll = d.sides();
 	
 	auto str = std::to_string(roll);
@@ -40,9 +40,9 @@ void dice::write_die_roll(Die const& d, Die::result_type roll, ostream & os) {
 	os << str;
 }
 
-void dice::write_dice_roll_sum(vector<Die> const& dice, vector<Die::result_type> const& roll, ostream & os) {
+void dice::write_dice_roll_sum(vector<die> const& dice, vector<die::result_type> const& roll, ostream & os) {
 	auto sum = util::sum(roll);
-	Die::result_type max_sum = 0;
+	die::result_type max_sum = 0;
 	for (auto & d: dice) max_sum += d.sides();
 	
 	auto str = std::to_string(sum);
@@ -52,7 +52,7 @@ void dice::write_dice_roll_sum(vector<Die> const& dice, vector<Die::result_type>
 	os << str;
 }
 
-void dice::print_chosen_dice(vector<Die> const& dice) {
+void dice::print_chosen_dice(vector<die> const& dice) {
 	if (dice.empty()) {
 		cout << "(no dice chosen)\n";
 	} else {
@@ -60,7 +60,7 @@ void dice::print_chosen_dice(vector<Die> const& dice) {
 	}
 }
 
-void dice::print_default_dice(vector<Die> const& dice, bool verbose) {
+void dice::print_default_dice(vector<die> const& dice, bool verbose) {
 	if (verbose) {
 		if (dice.empty()) {
 			cout << "(default choice: no dice)\n";
@@ -70,7 +70,7 @@ void dice::print_default_dice(vector<Die> const& dice, bool verbose) {
 	}
 }
 
-void dice::print_dice_roll(vector<Die> const& dice, vector<Die::result_type> const& roll, bool verbose) {
+void dice::print_dice_roll(vector<die> const& dice, vector<die::result_type> const& roll, bool verbose) {
 	if (verbose) {
 		switch (roll.size()) {
 		case 0:
@@ -86,7 +86,7 @@ void dice::print_dice_roll(vector<Die> const& dice, vector<Die::result_type> con
 			{
 				write_die_roll(dice[0], roll[0], cout);
 				
-				for (typename vector<Die>::size_type i = 1; i < dice.size(); ++i) {
+				for (typename vector<die>::size_type i = 1; i < dice.size(); ++i) {
 					cout << " + ";
 					write_die_roll(dice[i], roll[i], cout);
 				}
@@ -151,7 +151,7 @@ void dice::print_help_message_hint(string_view basename) {
 	cerr << "Try \"" << basename << " --help\" for some example uses.\n";
 }
 
-bool dice::read_die(string_view str, vector<Die> & dice) {
+bool dice::read_die(string_view str, vector<die> & dice) {
 	bool success = false;
 	
 	try {
@@ -164,7 +164,7 @@ bool dice::read_die(string_view str, vector<Die> & dice) {
 	} catch (std::out_of_range &) {
 		cerr << str << " is too many sides for a die. Maximum number of sides is "
 			<< int_limits::max() << ".\n";
-	} catch (Die::bad_num_sides & ex) {
+	} catch (die::bad_num_sides & ex) {
 		cerr << "Expected one or more sides, got " << ex.n << ".\n";
 	}
 	
