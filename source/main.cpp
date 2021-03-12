@@ -73,7 +73,7 @@ int process_options(vector<string_view> const& args,
 			auto str = as_string_view(match[1]);
 			
 			try {
-				n = to_i(str);
+				util::from_chars(str, n);
 			} catch (std::invalid_argument &) {
 				cerr << "'" << str << "' is not an integer.\n"
 					<< "\n"

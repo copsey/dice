@@ -141,20 +141,22 @@ void dice::print_cl_help(string_view basename) {
 }
 
 void dice::print_version() {
-	cout << "dice " << version_c_str << "\n";
-	cout << "Copyright (c) 2016-2021 Jack Copsey\n";
+	cout << "dice " << version_c_str << "\n"
+            "Copyright (c) 2016-2021 Jack Copsey\n";
 }
 
 void dice::print_invalid_clo(string_view str, string_view basename) {
 	cerr << str << " is not a valid option.\n"
-		<< "Use \"" << basename << " --help\" to see a list of all available options.\n";
+	        "Use \"" << basename << " --help\" to see a list of all available options.\n";
 }
 
 bool dice::read_die(string_view str, vector<Die> & dice) {
 	auto success = false;
 	
 	try {
-		dice.emplace_back(util::to_i(str));
+		int num_sides;
+		util::from_chars(str, num_sides);
+		dice.emplace_back(num_sides);
 		success = true;
 	} catch (std::invalid_argument &) {
 		cerr << "'" << str << "' is not an integer.\n";

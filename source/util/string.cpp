@@ -1,4 +1,5 @@
 #include <cctype>
+#include <charconv>
 #include <cstddef>
 #include <stdexcept>
 
@@ -29,17 +30,20 @@ vector<string_view> dice::util::split_and_prune(string_view str) {
 	return substrings;
 }
 
-int dice::util::to_i(string_view str, int base) {
-	std::size_t pos;
+void dice::util::from_chars(string_view str, int  & value, int base) {
+	auto result = std::from_chars(str.begin(), str.end(), value, base);
 
-	auto s = string{str};
-	auto i = std::stoi(s, &pos, base);
-	
-	if (pos < s.size()) {
-		throw std::invalid_argument{"dice::util::to_i: excess chars"};
+	if (result.ec == std::errc::invalid_argument) {
+		throw std::invalid_argument{"dice::util::from_chars: bad input"};
 	}
 	
-	return i;
+	if (result.ec == std::errc::result_out_of_range) {
+		throw std::out_of_range{"dice::util::from_chars: too large to store in int"};
+	}
+	
+	if (result.ptr != str.end()) {
+		throw std::invalid_argument{"dice::util::from_chars: excess chars"};
+	}
 }
 
 void dice::util::pad_front(string & str, char ch, string::size_type min_l) {
