@@ -16,14 +16,11 @@ using std::cout;
 using std::cerr;
 
 using int_limits = std::numeric_limits<int>;
+using optional_int = std::optional<int>;
 
 using namespace dice;
 
-ostream & dice::operator<<(ostream & os, Die const& d) {
-	return os << 'd' << d.sides();
-}
-
-ostream & dice::operator<<(ostream & os, vector<Die> const& dice) {
+ostream & dice::operator<< (ostream & os, vector<Die> const& dice) {
 	if (dice.empty()) return os;
 
 	os << dice.front();
@@ -150,8 +147,12 @@ void dice::print_invalid_clo(string_view str, string_view basename) {
 	        "Use \"" << basename << " --help\" to see a list of all available options.\n";
 }
 
+void dice::print_help_message_hint(string_view basename) {
+	cerr << "Try \"" << basename << " --help\" for some example uses.\n";
+}
+
 bool dice::read_die(string_view str, vector<Die> & dice) {
-	auto success = false;
+	bool success = false;
 	
 	try {
 		int num_sides;
@@ -168,4 +169,35 @@ bool dice::read_die(string_view str, vector<Die> & dice) {
 	}
 	
 	return success;
+}
+
+bool dice::read_num_rolls(string_view str, optional_int & num_rolls, string_view arg, string_view basename) {
+	int n;
+	
+	try {
+		util::from_chars(str, n);
+	} catch (std::invalid_argument &) {
+		cerr << "'" << str << "' is not an integer.\n"
+		        "\n"
+		        "This error was caused by " << arg << ".\n"
+		        "Use \"" << basename << " --help\" for a description of the options.\n";
+		return false;
+	} catch (std::out_of_range &) {
+		cerr << "Maximum number of rolls is " << int_limits::max() << ".\n"
+		        "\n"
+		        "This error was caused by " << arg << ".\n"
+		        "Use \"" << basename << " --help\" for a description of the options.\n";
+		return false;
+	}
+
+	if (n < 0) {
+		cerr << "Expected zero or more rolls, got " << n << ".\n"
+		        "\n"
+		        "This error was caused by " << arg << ".\n"
+		        "Use \"" << basename << " --help\" for a description of the options.\n";
+		return false;
+	}
+	
+	num_rolls = n;
+	return true;
 }

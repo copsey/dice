@@ -1,5 +1,4 @@
 #include <iostream>
-#include <limits>
 #include <optional>
 #include <stdexcept>
 #include <string>
@@ -14,7 +13,6 @@
 #include "io.hpp"
 #include "random.hpp"
 
-using std::cerr;
 using std::cin;
 using std::cout;
 using std::endl;
@@ -24,7 +22,6 @@ using std::string;
 using std::string_view;
 using std::vector;
 
-using int_limits = std::numeric_limits<int>;
 using optional_int = std::optional<int>;
 
 using namespace dice;
@@ -69,37 +66,13 @@ int process_options(vector<string_view> const& args,
 		} else if (arg=="-v" || arg=="--verbose") {
 			verbose = true;
 		} else if (sv_match match; regex_match(arg, match, rolls_option_regex)) {
-			int n;
 			auto str = as_string_view(match[1]);
-			
-			try {
-				util::from_chars(str, n);
-			} catch (std::invalid_argument &) {
-				cerr << "'" << str << "' is not an integer.\n"
-					<< "\n"
-					<< "This error was caused by " << arg << ".\n"
-					<< "Use \"" << basename << " --help\" for a description of the options.\n";
-				status = 1;
-				break;
-			} catch (std::out_of_range &) {
-				cerr << "Maximum number of rolls is " << int_limits::max() << ".\n"
-					<< "\n"
-					<< "This error was caused by " << arg << ".\n"
-					<< "Use \"" << basename << " --help\" for a description of the options.\n";
+			auto success = read_num_rolls(str, num_rolls, arg, basename);
+
+			if (!success) {
 				status = 1;
 				break;
 			}
-			
-			if (n < 0) {
-				cerr << "Expected zero or more rolls, got " << n << ".\n"
-					<< "\n"
-					<< "This error was caused by " << arg << ".\n"
-					<< "Use \"" << basename << " --help\" for a description of the options.\n";
-				status = 1;
-				break;
-			}
-			
-			num_rolls = n;
 		} else if (is_clo(arg)) {
 			print_invalid_clo(arg, basename);
 			status = 1;
@@ -123,10 +96,7 @@ int process_choice_of_dice(vector<string_view> const& args, vector<Die> & dice) 
 		}
 	}
 
-	if (status != 0) {
-		cerr << "Try \"" << basename << " --help\" for some example uses.\n";
-	}
-
+	if (status != 0) print_help_message_hint(basename);
 	return status;
 }
 

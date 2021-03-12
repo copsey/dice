@@ -1,6 +1,7 @@
 #ifndef DICE_IO
 #define DICE_IO
 
+#include <optional>
 #include <ostream>
 #include <regex>
 #include <string>
@@ -15,10 +16,12 @@ namespace dice {
 	inline auto const rolls_option_regex = std::regex{"(?:--rolls=)(.*)"};
 
 	/// Write "dN" to `os`, where N is the number of sides of `d`.
-	std::ostream & operator<<(std::ostream & os, Die const& d);
+	inline std::ostream & operator<< (std::ostream & os, Die const& d) {
+		return os << 'd' << d.sides();
+	}
 	
 	/// Write `dice` to `os` as a list in the form "dn1 dn2 ...".
-	std::ostream & operator<<(std::ostream & os, std::vector<Die> const& dice);
+	std::ostream & operator<< (std::ostream & os, std::vector<Die> const& dice);
 	
 	/// Write the die roll `r` obtained from `d` to `os`.
 	///
@@ -70,6 +73,10 @@ namespace dice {
 	/// Print an error message indicating that `str` is not a command-line
 	/// option.
 	void print_invalid_clo(std::string_view str, std::string_view basename);
+
+	/// Print an error message instructing the user how to access the program's
+	/// help message from the command line.
+	void print_help_message_hint(std::string_view basename);
 	
 	/// Convert `str` to an `int` and append a new die to the end of `dice` with
 	/// that many sides.
@@ -79,6 +86,15 @@ namespace dice {
 	///
 	/// @returns whether the function succeeded.
 	bool read_die(std::string_view str, std::vector<Die> & dice);
+
+	/// Convert `str` to an integer and treat this as the number of times to
+	/// roll the dice before quitting the program.
+	/// 
+	/// An error message is printed if this fails, in which case `num_rolls`
+	/// remains in the same state as before the function was called.
+	/// 
+	/// @returns whether the function succeeded.
+	bool read_num_rolls(std::string_view str, std::optional<int> & num_rolls, std::string_view arg, std::string_view basename);
 }
 
 #endif
