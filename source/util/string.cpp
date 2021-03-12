@@ -30,7 +30,7 @@ vector<string_view> dice::util::split_and_prune(string_view str) {
 	return substrings;
 }
 
-void dice::util::from_chars(string_view str, int  & value, int base) {
+void dice::util::from_chars(string_view str, int & value, int base) {
 	auto result = std::from_chars(str.begin(), str.end(), value, base);
 
 	if (result.ec == std::errc::invalid_argument) {

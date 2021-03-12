@@ -24,7 +24,10 @@ using std::vector;
 using optional_int = std::optional<int>;
 
 using namespace dice;
-using namespace dice::util;
+
+using util::as_string_view;
+using util::regex_match;
+using util::sv_match;
 
 /// Roll each of the given dice.
 ///
@@ -72,7 +75,7 @@ int process_options(vector<string_view> const& args,
 				status = 1;
 				break;
 			}
-		} else if (is_clo(arg)) {
+		} else if (util::is_clo(arg)) {
 			print_invalid_clo(arg, basename);
 			status = 1;
 			break;
@@ -90,7 +93,7 @@ int process_choice_of_dice(vector<string_view> const& args, vector<die> & dice) 
 	for (int i = 1; i < args.size(); ++i) {
 		string_view arg = args[i];
 		
-		if (!is_clo(arg)) {
+		if (!util::is_clo(arg)) {
 			if (!read_die(arg, dice)) status = 2;
 		}
 	}
@@ -101,7 +104,7 @@ int process_choice_of_dice(vector<string_view> const& args, vector<die> & dice) 
 
 /// Process user input during interactive mode.
 void handle_input(string_view input, vector<die> & dice, bool & quit, bool verbose) {
-	auto commands = split_and_prune(input);
+	auto commands = util::split_and_prune(input);
 	
 	if (commands.empty() || commands[0] == "r" || commands[0] == "roll") {
 		roll_dice_and_print(dice, verbose);
@@ -138,7 +141,7 @@ int main(int arg_c, char const* arg_v[]) {
 
 	// Process input to the program.
 
-	auto args = encapsulate_args(arg_c, arg_v);
+	auto args = util::encapsulate_args(arg_c, arg_v);
 
 	if (int status = process_options(args, num_rolls, quit, verbose); status != 0) {
 		return status;

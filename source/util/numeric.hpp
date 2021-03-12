@@ -6,10 +6,11 @@
 namespace dice {
 	namespace util {
 		/// Calculate the sum of the elements in `c`, starting from 0.
-		template <typename Cont>
-		typename Cont::value_type sum(const Cont & c) {
-			using T = typename Cont::value_type;
-			return std::accumulate(c.begin(), c.end(), T{0});
+		template <typename Container>
+		auto sum(Container const& c) -> typename Container::value_type
+		{
+			auto zero = typename Container::value_type {0};
+			return std::accumulate(c.begin(), c.end(), zero);
 		}
 	}
 }
