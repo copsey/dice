@@ -70,7 +70,7 @@ int process_options(vector<string_view> const& args,
 			verbose = true;
 		} else if (sv_match match; regex_match(arg, match, rolls_option_regex)) {
 			int n;
-			auto str = to_string_view(match[1]);
+			auto str = as_string_view(match[1]);
 			
 			try {
 				n = to_i(str);

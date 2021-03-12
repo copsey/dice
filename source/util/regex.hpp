@@ -17,7 +17,7 @@ namespace dice {
             return std::regex_match(sv.begin(), sv.end(), m, e, flags);
         }
 
-        inline std::string_view to_string_view(sv_sub_match const& m) {
+        inline std::string_view as_string_view(sv_sub_match const& m) {
             auto begin = m.first;
             auto length = static_cast<std::string_view::size_type>(m.length());
             
