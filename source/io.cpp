@@ -8,9 +8,7 @@
 #include "info.hpp"
 #include "io.hpp"
 
-namespace dice {
-
-std::ostream & operator<< (std::ostream & out, std::vector<die> const& dice) {
+std::ostream & dice::operator<< (std::ostream & out, std::vector<die> const& dice) {
 	if (dice.empty()) return out;
 
 	out << dice.front();
@@ -20,7 +18,7 @@ std::ostream & operator<< (std::ostream & out, std::vector<die> const& dice) {
 	return out;
 }
 
-void write_die_roll(die const& d, die::result_type roll, std::ostream & out) {
+void dice::write_die_roll(die const& d, die::result_type roll, std::ostream & out) {
 	auto max_roll = d.sides();
 	
 	auto str = std::to_string(roll);
@@ -30,7 +28,7 @@ void write_die_roll(die const& d, die::result_type roll, std::ostream & out) {
 	out << str;
 }
 
-void write_dice_roll_sum(std::vector<die> const& dice, std::vector<die::result_type> const& roll, std::ostream & out) {
+void dice::write_dice_roll_sum(std::vector<die> const& dice, std::vector<die::result_type> const& roll, std::ostream & out) {
 	auto sum = util::sum(roll);
 	die::result_type max_sum = 0;
 	for (auto & d: dice) max_sum += d.sides();
@@ -192,6 +190,4 @@ bool dice::read_num_rolls(std::string_view str, std::optional<int> & num_rolls, 
 	}
 	
 	return true;
-}
-
 }
