@@ -26,7 +26,10 @@ namespace dice {
 		///
 		/// If `str.size()` is already `min_l` or more, this function has no
 		/// effect.
-		void pad_front(std::string & str, char ch, std::string::size_type min_l);
+		inline void pad_front(std::string & str, char ch, std::string::size_type min_l = 1)
+		{
+			str.insert(0, (str.size() < min_l) ? (min_l - str.size()) : 0, ch);
+		}
 	}
 }
 

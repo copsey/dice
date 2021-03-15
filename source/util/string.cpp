@@ -1,6 +1,5 @@
 #include <cctype>
 #include <charconv>
-#include <cstddef>
 #include <stdexcept>
 
 #include "string.hpp"
@@ -44,8 +43,4 @@ void dice::util::from_chars(string_view str, int & value, int base) {
 	if (result.ptr != str.end()) {
 		throw std::invalid_argument{"dice::util::from_chars: excess chars"};
 	}
-}
-
-void dice::util::pad_front(string & str, char ch, string::size_type min_l) {
-	str.insert(0, (str.size() < min_l) ? (min_l - str.size()) : 0, ch);
 }
