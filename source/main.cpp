@@ -46,64 +46,65 @@ void roll_dice_and_print(vector<die> const& dice, bool verbose) {
 }
 
 /// Apply the effects of the command line options. Any other input is ignored.
-int process_options(vector<string_view> const& args,
-	optional_int & num_rolls, bool & quit, bool & verbose)
+/// 
+/// Optionally returns a status code. If present, the program should be
+/// terminated after this function is called.
+optional_int process_options(vector<string_view> const& args, optional_int & num_rolls, bool & verbose)
 {
-	int status = 0;
 	string_view basename = args[0];
 
-	for (int i = 1; i < args.size(); ++i) {
-		string_view arg = args[i];
+	for (auto i = args.begin() + 1; i != args.end(); ++i) {
+		string_view arg = *i;
 
 		if (arg == "-?" || arg == "--help") {
 			print_cl_help(basename);
-			quit = true;
-			break;
+			return 0;
 		} else if (arg == "-#" || arg == "--version") {
 			print_version();
-			quit = true;
-			break;
+			return 0;
 		} else if (arg == "-q" || arg == "--quiet") {
 			verbose = false;
-		} else if (arg=="-v" || arg=="--verbose") {
+		} else if (arg == "-v" || arg == "--verbose") {
 			verbose = true;
 		} else if (sv_match match; regex_match(arg, match, regex::rolls_option)) {
 			auto str = as_string_view(match[1]);
 			auto success = read_num_rolls(str, num_rolls, arg, basename);
-
-			if (!success) {
-				status = 1;
-				break;
-			}
+			if (!success) return 1;
 		} else if (util::is_clo(arg)) {
 			print_invalid_clo(arg, basename);
-			status = 1;
-			break;
+			return 1;
 		}
 	}
 
-	return status;
+	return {};
 }
 
 /// Read the initial choice of dice. Any options are ignored.
-int process_choice_of_dice(vector<string_view> const& args, vector<die> & dice) {
-	int status = 0;
+/// 
+/// Optionally returns a status code. If present, the program should be
+/// terminated after this function is called.
+optional_int process_choice_of_dice(vector<string_view> const& args, vector<die> & dice)
+{
 	string_view basename = args[0];
 	
-	for (int i = 1; i < args.size(); ++i) {
-		string_view arg = args[i];
+	for (auto i = args.begin() + 1; i != args.end(); ++i) {
+		string_view arg = *i;
 		
-		if (!util::is_clo(arg)) {
-			if (!read_die(arg, dice)) status = 2;
+		// Skip command-line options
+		if (util::is_clo(arg)) continue;
+
+		if (!read_die(arg, dice)) {
+			print_help_message_hint(basename);
+			return 2;
 		}
 	}
 
-	if (status != 0) print_help_message_hint(basename);
-	return status;
+	return {};
 }
 
 /// Process user input during interactive mode.
-void handle_input(string_view input, vector<die> & dice, bool & quit, bool verbose) {
+void handle_input(string_view input, vector<die> & dice, bool & quit, bool verbose)
+{
 	auto commands = util::split_and_prune(input);
 	
 	if (commands.empty() || commands[0] == "r" || commands[0] == "roll") {
@@ -133,27 +134,23 @@ void handle_input(string_view input, vector<die> & dice, bool & quit, bool verbo
 	}
 }
 
-int main(int arg_c, char const* arg_v[]) {
+int main(int arg_c, char const* arg_v[])
+{
 	vector<die> dice;
 	optional_int num_rolls;
-	bool quit = false;
 	bool verbose = true;
 
 	// Process input to the program.
 
 	auto args = util::encapsulate_args(arg_c, arg_v);
 
-	if (int status = process_options(args, num_rolls, quit, verbose); status != 0) {
-		return status;
+	if (optional_int status = process_options(args, num_rolls, verbose); status) {
+		return *status;
 	}
 
-	if (int status = process_choice_of_dice(args, dice); status != 0) {
-		return status;
+	if (optional_int status = process_choice_of_dice(args, dice); status) {
+		return *status;
 	}
-
-	// Quit now if requested.
-
-	if (quit) return 0;
 
 	// Choose a default set of dice if none were specified by the user.
 	
@@ -171,18 +168,19 @@ int main(int arg_c, char const* arg_v[]) {
 	
 	if (num_rolls) {
 		for (int i = 0; i < *num_rolls; ++i) roll_dice_and_print(dice, verbose);
-		quit = true;
+		return 0;
 	} else {
 		roll_dice_and_print(dice, verbose);
 	}
 
 	// The main loop ...
 	
-	while (!quit) {
+	for (bool quit = false; !quit; ) {
 		cout << ">>> ";
 
-		/// Handle the user input.
-		/// Stop program execution when the input is empty.
+		// Handle the user input.
+		// Stop program execution when the input becomes invalid (e.g., EOF is
+		// encountered).
 		
 		if (string input; getline(cin, input)) {
 			handle_input(input, dice, quit, verbose);
