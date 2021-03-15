@@ -122,7 +122,10 @@ void handle_input(string_view input, vector<die> & dice, bool & quit, bool verbo
 		for (auto i = commands.begin() + 1; i != commands.end(); ++i) {
 			string_view str = *i;
 			
-			if (!read_die(str, new_dice)) success = false;
+			if (!read_die(str, new_dice)) {
+				success = false;
+				break;
+			}
 		}
 		
 		if (success) {
