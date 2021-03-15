@@ -6,29 +6,29 @@
 
 namespace dice {
 	namespace util {
-        // Support for std::string_view in std::regex.
+		// Support for std::string_view in std::regex.
 
-        using sv_match = std::match_results<std::string_view::const_iterator>;
+		using sv_match = std::match_results<std::string_view::const_iterator>;
 		using sv_sub_match = std::sub_match<std::string_view::const_iterator>;
+		
+		inline bool regex_match(std::string_view sv, std::regex const& e,
+			std::regex_constants::match_flag_type flags = std::regex_constants::match_default)
+		{
+			return std::regex_match(sv.begin(), sv.end(), e, flags);
+		}
 
-        inline bool regex_match(std::string_view sv, std::regex const& e,
-            std::regex_constants::match_flag_type flags = std::regex_constants::match_default)
-        {
-            return std::regex_match(sv.begin(), sv.end(), e, flags);
-        }
+		inline bool regex_match(std::string_view sv, sv_match & m, std::regex const& e,
+			std::regex_constants::match_flag_type flags = std::regex_constants::match_default)
+		{
+			return std::regex_match(sv.begin(), sv.end(), m, e, flags);
+		}
 
-        inline bool regex_match(std::string_view sv, sv_match & m, std::regex const& e,
-            std::regex_constants::match_flag_type flags = std::regex_constants::match_default)
-        {
-            return std::regex_match(sv.begin(), sv.end(), m, e, flags);
-        }
-
-        inline std::string_view as_string_view(sv_sub_match const& m) {
-            auto begin = m.first;
-            auto length = static_cast<std::string_view::size_type>(m.length());
-            
-            return std::string_view{begin, length};
-        }
+		inline std::string_view as_string_view(sv_sub_match const& m) {
+			auto begin = m.first;
+			auto length = static_cast<std::string_view::size_type>(m.length());
+			
+			return std::string_view{begin, length};
+		}
 	}
 }
 
