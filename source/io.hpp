@@ -73,8 +73,14 @@ namespace dice {
 	void print_invalid_input();
 	
 	/// Print an error message indicating that `str` is not a command-line
-	/// option.
-	void print_invalid_clo(std::string_view str, std::string_view basename);
+	/// option, and instructions for how to print a list of all available
+	/// options.
+	void print_nonexistent_option_hint(std::string_view str, std::string_view basename);
+
+	/// Print an error message indicating that there was an issue while trying
+	/// to apply the effects of the command-line option contained in `str`,
+	/// and instructions for how to print further help on the option.
+	void print_option_use_hint(std::string_view str, std::string_view basename);
 
 	/// Print an error message instructing the user how to access the program's
 	/// help message from the command line.
@@ -96,7 +102,7 @@ namespace dice {
 	/// remains in the same state as before the function was called.
 	/// 
 	/// @returns whether the function succeeded.
-	bool read_num_rolls(std::string_view str, std::optional<int> & num_rolls, std::string_view arg, std::string_view basename);
+	bool read_num_rolls(std::string_view str, std::optional<int> & num_rolls);
 }
 
 #endif

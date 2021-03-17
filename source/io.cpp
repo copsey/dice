@@ -132,9 +132,14 @@ void dice::print_version() {
               << "Copyright (c) 2016-2021 Jack Copsey\n";
 }
 
-void dice::print_invalid_clo(std::string_view str, std::string_view basename) {
+void dice::print_nonexistent_option_hint(std::string_view str, std::string_view basename) {
 	std::cerr << str << " is not a valid option.\n"
 	          << "Use \"" << basename << " --help\" to see a list of all available options.\n";
+}
+
+void dice::print_option_use_hint(std::string_view str, std::string_view basename) {
+	std::cerr << "This error was caused by " << str << ".\n"
+	          << "Use \"" << basename << " --help\" for a description of the options.\n";
 }
 
 void dice::print_help_message_hint(std::string_view basename) {
@@ -161,33 +166,26 @@ bool dice::read_die(std::string_view str, std::vector<die> & dice) {
 	return success;
 }
 
-bool dice::read_num_rolls(std::string_view str, std::optional<int> & num_rolls, std::string_view arg, std::string_view basename) {
+bool dice::read_num_rolls(std::string_view str, std::optional<int> & num_rolls)
+{
+	int i;
+	
 	try {
-		int n;
-		util::from_chars(str, n);
-		num_rolls = n;
-
-		if (n < 0) {
-			std::cerr << "Expected zero or more rolls, got " << n << ".\n"
-			          << "\n"
-			          << "This error was caused by " << arg << ".\n"
-			          << "Use \"" << basename << " --help\" for a description of the options.\n";
-			return false;
-		}
+		util::from_chars(str, i);
 	} catch (std::invalid_argument &) {
-		std::cerr << "'" << str << "' is not an integer.\n"
-		          << "\n"
-		          << "This error was caused by " << arg << ".\n"
-		          << "Use \"" << basename << " --help\" for a description of the options.\n";
+		std::cerr << "'" << str << "' is not an integer.\n";
 		return false;
 	} catch (std::out_of_range &) {
 		using int_limits = std::numeric_limits<int>;
-		std::cerr << "Maximum number of rolls is " << int_limits::max() << ".\n"
-		          << "\n"
-		          << "This error was caused by " << arg << ".\n"
-		          << "Use \"" << basename << " --help\" for a description of the options.\n";
+		std::cerr << "Maximum number of rolls is " << int_limits::max() << ".\n";
 		return false;
 	}
-	
+
+	if (i < 0) {
+		std::cerr << "Expected zero or more rolls, got " << i << ".\n";
+		return false;
+	}
+
+	num_rolls = i;
 	return true;
 }

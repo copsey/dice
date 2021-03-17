@@ -68,10 +68,13 @@ optional_int process_options(vector<string_view> const& args, optional_int & num
 			verbose = true;
 		} else if (sv_match match; regex_match(arg, match, regex::rolls_option)) {
 			auto str = as_string_view(match[1]);
-			auto success = read_num_rolls(str, num_rolls, arg, basename);
-			if (!success) return 1;
+			if (!read_num_rolls(str, num_rolls)) {
+				std::cerr << "\n";
+				print_option_use_hint(arg, basename);
+				return 1;
+			}
 		} else if (util::is_clo(arg)) {
-			print_invalid_clo(arg, basename);
+			print_nonexistent_option_hint(arg, basename);
 			return 1;
 		}
 	}
