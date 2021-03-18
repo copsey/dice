@@ -15,7 +15,7 @@ $(objs): build/%.o: source/%.cpp
 
 build/io.o: source/die.hpp source/info.hpp
 
-build/main.o: source/die.hpp
+build/main.o: source/die.hpp source/io.hpp
 
 clean:
 	rm -f dice
