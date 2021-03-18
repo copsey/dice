@@ -12,6 +12,47 @@ using int_limits = std::numeric_limits<int>;
 
 using namespace dice;
 
+std::optional<die> dice::read_die(std::string_view str)
+{
+	std::optional<die> d;
+
+	try {
+		int sides;
+		util::from_chars(str, sides);
+		d.emplace(sides);
+	} catch (std::invalid_argument &) {
+		std::cerr << "'" << str << "' is not an integer.\n";
+	} catch (std::out_of_range &) {
+		std::cerr << str << " is too many sides for a die. Maximum number of sides is " << int_limits::max() << ".\n";
+	} catch (die::bad_num_sides & ex) {
+		std::cerr << "Expected one or more sides, got " << ex.n << ".\n";
+	}
+	
+	return d;
+}
+
+std::optional<int> dice::read_num_rolls(std::string_view str)
+{
+	std::optional<int> num_rolls;
+
+	try {
+		int i;
+		util::from_chars(str, i);
+
+		if (i < 0) {
+			std::cerr << "Expected zero or more rolls, got " << i << ".\n";
+		} else {
+			num_rolls = i;
+		}
+	} catch (std::invalid_argument &) {
+		std::cerr << "'" << str << "' is not an integer.\n";
+	} catch (std::out_of_range &) {
+		std::cerr << "Maximum number of rolls is " << int_limits::max() << ".\n";
+	}
+
+	return num_rolls;
+}
+
 std::ostream & dice::operator<< (std::ostream & out, std::vector<die> const& dice) {
 	if (dice.empty()) return out;
 
@@ -22,7 +63,7 @@ std::ostream & dice::operator<< (std::ostream & out, std::vector<die> const& dic
 	return out;
 }
 
-void dice::write_die_roll(die const& d, die::result_type roll, std::ostream & out) {
+void dice::write_die_roll(std::ostream & out, die const& d, die::result_type roll) {
 	auto max_roll = d.sides();
 	
 	auto str = std::to_string(roll);
@@ -32,8 +73,8 @@ void dice::write_die_roll(die const& d, die::result_type roll, std::ostream & ou
 	out << str;
 }
 
-void dice::write_dice_roll_sum(std::vector<die> const& dice, std::vector<die::result_type> const& roll, std::ostream & out) {
-	auto sum = util::sum(roll);
+void dice::write_dice_roll_sum(std::ostream & out, std::vector<die> const& dice, std::vector<die::result_type> const& rolls) {
+	auto sum = util::sum(rolls);
 	die::result_type max_sum = 0;
 	for (auto & d: dice) max_sum += d.sides();
 	
@@ -62,38 +103,36 @@ void dice::print_default_dice(std::vector<die> const& dice, bool verbose) {
 	}
 }
 
-void dice::print_dice_roll(std::vector<die> const& dice, std::vector<die::result_type> const& roll, bool verbose) {
+void dice::print_dice_roll(std::vector<die> const& dice, std::vector<die::result_type> const& rolls, bool verbose) {
 	if (verbose) {
-		switch (roll.size()) {
+		switch (rolls.size()) {
 		case 0:
 			std::cout << "0\n";
 			break;
 			
 		case 1:
-			write_die_roll(dice[0], roll[0], std::cout);
+			write_die_roll(std::cout, dice.front(), rolls.front());
 			std::cout << "\n";
 			break;
 			
 		default:
-			{
-				write_die_roll(dice[0], roll[0], std::cout);
-				
-				for (typename std::vector<die>::size_type i = 1; i < dice.size(); ++i) {
-					std::cout << " + ";
-					write_die_roll(dice[i], roll[i], std::cout);
+			{	
+				for (typename std::vector<die>::size_type i = 0; i < dice.size(); ++i) {
+					if (i != 0) std::cout << " + ";
+					write_die_roll(std::cout, dice[i], rolls[i]);
 				}
 				
 				std::cout << " = ";
-				write_dice_roll_sum(dice, roll, std::cout);
+				write_dice_roll_sum(std::cout, dice, rolls);
 				std::cout << "\n";
 				break;
 			}
 		}
 	} else {
-		if (roll.size() > 0) {
-			std::cout << roll[0];
-			for (auto i = roll.begin() + 1; i != roll.end(); ++i) {
-				std::cout << " " << *i;
+		if (rolls.size() > 0) {
+			for (auto iter = rolls.begin(); iter != rolls.end(); ++iter) {
+				if (iter != rolls.begin()) std::cout << " ";
+				std::cout << *iter;
 			}
 			std::cout << "\n";
 		}
@@ -148,45 +187,4 @@ void dice::print_option_use_hint(std::string_view str, std::string_view basename
 
 void dice::print_help_message_hint(std::string_view basename) {
 	std::cerr << "Try \"" << basename << " --help\" for some example uses.\n";
-}
-
-std::optional<die> dice::read_die(std::string_view str)
-{
-	std::optional<die> d;
-
-	try {
-		int sides;
-		util::from_chars(str, sides);
-		d.emplace(sides);
-	} catch (std::invalid_argument &) {
-		std::cerr << "'" << str << "' is not an integer.\n";
-	} catch (std::out_of_range &) {
-		std::cerr << str << " is too many sides for a die. Maximum number of sides is " << int_limits::max() << ".\n";
-	} catch (die::bad_num_sides & ex) {
-		std::cerr << "Expected one or more sides, got " << ex.n << ".\n";
-	}
-	
-	return d;
-}
-
-std::optional<int> dice::read_num_rolls(std::string_view str)
-{
-	std::optional<int> num_rolls;
-
-	try {
-		int i;
-		util::from_chars(str, i);
-
-		if (i < 0) {
-			std::cerr << "Expected zero or more rolls, got " << i << ".\n";
-		} else {
-			num_rolls = i;
-		}
-	} catch (std::invalid_argument &) {
-		std::cerr << "'" << str << "' is not an integer.\n";
-	} catch (std::out_of_range &) {
-		std::cerr << "Maximum number of rolls is " << int_limits::max() << ".\n";
-	}
-
-	return num_rolls;
 }
