@@ -86,23 +86,20 @@ namespace dice {
 	/// help message from the command line.
 	void print_help_message_hint(std::string_view basename);
 	
-	/// Convert `str` to an `int` and append a new die to the end of `dice` with
-	/// that many sides.
+	/// Convert `str` to an integer and construct a die with this many sides.
+	/// An error message is printed if the die cannot be constructed.
 	///
-	/// An error message is printed if this fails for some reason. In this case,
-	/// `dice` remains in the same state as before the function was called.
-	///
-	/// @returns whether the function succeeded.
-	bool read_die(std::string_view str, std::vector<die> & dice);
+	/// @returns An optional containing the die, or `std::nullopt` if the die
+	/// cannot be constructed.
+	std::optional<die> read_die(std::string_view str);
 
 	/// Convert `str` to an integer and treat this as the number of times to
 	/// roll the dice before quitting the program.
+	/// An error message is printed if the operation fails.
 	/// 
-	/// An error message is printed if this fails, in which case `num_rolls`
-	/// remains in the same state as before the function was called.
-	/// 
-	/// @returns whether the function succeeded.
-	bool read_num_rolls(std::string_view str, std::optional<int> & num_rolls);
+	/// @returns An optional containing the number of rolls, or `std::nullopt`
+	/// if the operation fails.
+	std::optional<int> read_num_rolls(std::string_view str);
 }
 
 #endif

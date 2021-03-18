@@ -8,6 +8,10 @@
 #include "info.hpp"
 #include "io.hpp"
 
+using int_limits = std::numeric_limits<int>;
+
+using namespace dice;
+
 std::ostream & dice::operator<< (std::ostream & out, std::vector<die> const& dice) {
 	if (dice.empty()) return out;
 
@@ -146,46 +150,43 @@ void dice::print_help_message_hint(std::string_view basename) {
 	std::cerr << "Try \"" << basename << " --help\" for some example uses.\n";
 }
 
-bool dice::read_die(std::string_view str, std::vector<die> & dice) {
-	bool success = false;
-	
+std::optional<die> dice::read_die(std::string_view str)
+{
+	std::optional<die> d;
+
 	try {
-		int num_sides;
-		util::from_chars(str, num_sides);
-		dice.emplace_back(num_sides);
-		success = true;
+		int sides;
+		util::from_chars(str, sides);
+		d.emplace(sides);
 	} catch (std::invalid_argument &) {
 		std::cerr << "'" << str << "' is not an integer.\n";
 	} catch (std::out_of_range &) {
-		using int_limits = std::numeric_limits<int>;
 		std::cerr << str << " is too many sides for a die. Maximum number of sides is " << int_limits::max() << ".\n";
 	} catch (die::bad_num_sides & ex) {
 		std::cerr << "Expected one or more sides, got " << ex.n << ".\n";
 	}
 	
-	return success;
+	return d;
 }
 
-bool dice::read_num_rolls(std::string_view str, std::optional<int> & num_rolls)
+std::optional<int> dice::read_num_rolls(std::string_view str)
 {
-	int i;
-	
+	std::optional<int> num_rolls;
+
 	try {
+		int i;
 		util::from_chars(str, i);
+
+		if (i < 0) {
+			std::cerr << "Expected zero or more rolls, got " << i << ".\n";
+		} else {
+			num_rolls = i;
+		}
 	} catch (std::invalid_argument &) {
 		std::cerr << "'" << str << "' is not an integer.\n";
-		return false;
 	} catch (std::out_of_range &) {
-		using int_limits = std::numeric_limits<int>;
 		std::cerr << "Maximum number of rolls is " << int_limits::max() << ".\n";
-		return false;
 	}
 
-	if (i < 0) {
-		std::cerr << "Expected zero or more rolls, got " << i << ".\n";
-		return false;
-	}
-
-	num_rolls = i;
-	return true;
+	return num_rolls;
 }

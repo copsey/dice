@@ -42,8 +42,8 @@ optional_int process_options(std::vector<std::string_view> const& args, optional
 {
 	std::string_view basename = args[0];
 
-	for (auto i = args.begin() + 1; i != args.end(); ++i) {
-		std::string_view arg = *i;
+	for (auto iter = args.begin() + 1; iter != args.end(); ++iter) {
+		std::string_view arg = *iter;
 
 		if (arg == "-?" || arg == "--help") {
 			print_cl_help(basename);
@@ -56,8 +56,12 @@ optional_int process_options(std::vector<std::string_view> const& args, optional
 		} else if (arg == "-v" || arg == "--verbose") {
 			verbose = true;
 		} else if (util::sv_match match; util::regex_match(arg, match, regex::rolls_option)) {
-			auto str = util::as_string_view(match[1]);
-			if (!read_num_rolls(str, num_rolls)) {
+			std::string_view str = util::as_string_view(match[1]);
+
+			std::optional<int> i = read_num_rolls(str);
+			if (i) {
+				num_rolls = *i;
+			} else {
 				std::cerr << "\n";
 				print_option_use_hint(arg, basename);
 				return 1;
@@ -68,7 +72,7 @@ optional_int process_options(std::vector<std::string_view> const& args, optional
 		}
 	}
 
-	return {};
+	return std::nullopt;
 }
 
 /// Read the initial choice of dice. Any options are ignored.
@@ -79,19 +83,22 @@ optional_int process_choice_of_dice(std::vector<std::string_view> const& args, s
 {
 	std::string_view basename = args[0];
 	
-	for (auto i = args.begin() + 1; i != args.end(); ++i) {
-		std::string_view arg = *i;
+	for (auto iter = args.begin() + 1; iter != args.end(); ++iter) {
+		std::string_view arg = *iter;
 		
-		// Skip command-line options
+		// Skip command-line options.
 		if (util::is_clo(arg)) continue;
 
-		if (!read_die(arg, dice)) {
+		std::optional<die> d = read_die(arg);
+		if (d) {
+			dice.push_back(std::move(*d));
+		} else {
 			print_help_message_hint(basename);
 			return 2;
 		}
 	}
 
-	return {};
+	return std::nullopt;
 }
 
 /// Process user input during interactive mode.
@@ -109,21 +116,20 @@ void handle_input(std::string_view input, std::vector<die> & dice, bool & quit, 
 		print_chosen_dice(dice);
 	} else if (commands[0] == "c" || commands[0] == "choose") {
 		std::vector<die> new_dice;
-		bool success = true;
 		
-		for (auto i = commands.begin() + 1; i != commands.end(); ++i) {
-			std::string_view str = *i;
-			
-			if (!read_die(str, new_dice)) {
-				success = false;
-				break;
+		for (auto iter = commands.begin() + 1; iter != commands.end(); ++iter) {
+			std::string_view str = *iter;
+
+			std::optional<die> d = read_die(str);
+			if (d) {
+				new_dice.push_back(std::move(*d));
+			} else {
+				return;
 			}
 		}
 		
-		if (success) {
-			dice = std::move(new_dice);
-			roll_dice_and_print(dice, verbose);
-		}
+		dice = std::move(new_dice);
+		roll_dice_and_print(dice, verbose);
 	} else {
 		print_invalid_input();
 	}
