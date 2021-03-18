@@ -141,16 +141,16 @@ void dice::print_dice_roll(std::vector<die> const& dice, std::vector<die::result
 
 void dice::print_program_help() {
 	std::cout << "Press ENTER with a blank input to roll the dice.\n"
-	          << "Enter 'c n1 n2 ...' to choose a new set of dice to roll,\n"
-	          << "  where n1, n2, ... are the number of sides on the dice.\n"
-	          << "Enter 'l' to list the chosen dice.\n"
-	          << "Enter 'h' to display this help message.\n"
-	          << "Enter 'q' to quit the program.\n";
+	          << "Enter 'choose <n1> <n2> ...' to choose a new set of dice to roll,\n"
+	          << "  where <n1>, <n2>, ... are the number of sides on the dice.\n"
+	          << "Enter 'list' to print the chosen dice.\n"
+	          << "Enter 'help' or '?' to print this help message.\n"
+	          << "Enter 'quit' or 'exit' to quit the program.\n";
 }
 
 void dice::print_invalid_input() {
 	std::cerr << "Your input could not be recognised.\n"
-	          << "Enter 'h' for help.\n";
+	          << "Enter 'help' or '?' for help.\n";
 }
 
 void dice::print_cl_help(std::string_view basename) {

@@ -106,15 +106,15 @@ void handle_input(std::string_view input, std::vector<die> & dice, bool & quit, 
 {
 	auto commands = util::split_and_prune(input);
 	
-	if (commands.empty() || commands[0] == "r" || commands[0] == "roll") {
+	if (commands.empty()) {
 		roll_dice_and_print(dice, verbose);
-	} else if (commands[0] == "q" || commands[0] == "quit" || commands[0] == "exit") {
+	} else if (commands[0] == "quit" || commands[0] == "exit") {
 		quit = true;
-	} else if (commands[0] == "h" || commands[0] == "help" || commands[0] == "?") {
+	} else if (commands[0] == "help" || commands[0] == "?") {
 		print_program_help();
-	} else if (commands[0] == "l" || commands[0] == "list") {
+	} else if (commands[0] == "list") {
 		print_chosen_dice(dice);
-	} else if (commands[0] == "c" || commands[0] == "choose") {
+	} else if (commands[0] == "choose") {
 		std::vector<die> new_dice;
 		
 		for (auto iter = commands.begin() + 1; iter != commands.end(); ++iter) {
