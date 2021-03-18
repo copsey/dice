@@ -13,7 +13,9 @@ $(objs): build/%.o: source/%.cpp
 	mkdir -p $(dir $@)
 	$(CXX) -c $(CXXFLAGS) $< -o $@
 
-build/io.o: source/info.hpp
+build/io.o: source/die.hpp source/info.hpp
+
+build/main.o: source/die.hpp
 
 clean:
 	rm -f dice
