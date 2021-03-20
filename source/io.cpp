@@ -19,13 +19,16 @@ std::optional<die> dice::read_die(std::string_view str)
 	try {
 		int sides;
 		util::from_chars(str, sides);
-		d.emplace(sides);
+
+		if (sides <= 0) {
+			std::cerr << "Expected one or more sides, got " << sides << ".\n";
+		} else {
+			d.emplace(sides);
+		}
 	} catch (std::invalid_argument &) {
 		std::cerr << "'" << str << "' is not an integer.\n";
 	} catch (std::out_of_range &) {
 		std::cerr << str << " is too many sides for a die. Maximum number of sides is " << int_limits::max() << ".\n";
-	} catch (die::bad_num_sides & ex) {
-		std::cerr << "Expected one or more sides, got " << ex.n << ".\n";
 	}
 	
 	return d;
