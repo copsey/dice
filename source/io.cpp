@@ -16,19 +16,17 @@ std::optional<die> dice::read_die(std::string_view str)
 {
 	std::optional<die> d;
 
-	try {
-		int sides;
-		util::from_chars(str, sides);
+	int sides;
+	auto result = util::from_chars(str, sides);
 
-		if (sides <= 0) {
-			std::cerr << "Expected one or more sides, got " << sides << ".\n";
-		} else {
-			d.emplace(sides);
-		}
-	} catch (std::invalid_argument &) {
+	if (result.ec == std::errc::invalid_argument) {
 		std::cerr << "'" << str << "' is not an integer.\n";
-	} catch (std::out_of_range &) {
+	} else if (result.ec == std::errc::result_out_of_range) {
 		std::cerr << str << " is too many sides for a die. Maximum number of sides is " << int_limits::max() << ".\n";
+	} else if (sides <= 0) {
+		std::cerr << "Expected one or more sides, got " << sides << ".\n";
+	} else {
+		d.emplace(sides);
 	}
 	
 	return d;
@@ -38,19 +36,17 @@ std::optional<int> dice::read_num_rolls(std::string_view str)
 {
 	std::optional<int> num_rolls;
 
-	try {
-		int i;
-		util::from_chars(str, i);
+	int i;
+	auto result = util::from_chars(str, i);
 
-		if (i < 0) {
-			std::cerr << "Expected zero or more rolls, got " << i << ".\n";
-		} else {
-			num_rolls = i;
-		}
-	} catch (std::invalid_argument &) {
+	if (result.ec == std::errc::invalid_argument) {
 		std::cerr << "'" << str << "' is not an integer.\n";
-	} catch (std::out_of_range &) {
+	} else if (result.ec == std::errc::result_out_of_range) {
 		std::cerr << "Maximum number of rolls is " << int_limits::max() << ".\n";
+	} else if (i < 0) {
+		std::cerr << "Expected zero or more rolls, got " << i << ".\n";
+	} else {
+		num_rolls = i;
 	}
 
 	return num_rolls;

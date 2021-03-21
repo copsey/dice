@@ -1,6 +1,7 @@
 #ifndef DICE_UTIL_STRING
 #define DICE_UTIL_STRING
 
+#include <charconv>
 #include <string>
 #include <string_view>
 #include <vector>
@@ -16,10 +17,10 @@ namespace dice {
 		/// Convert `str` into an int, using the given numeric base,
 		/// and store the result in `value`.
 		///
-		/// In addition to throwing the same exceptions as
-		/// `std::stoi(str, 0, base)`, a `std::invalid_argument` is thrown if some
-		/// unexpected superfluous `char`s were encountered at the end of `str`.
-		void from_chars(std::string_view str, int & value, int base = 10);
+		/// In addition to flagging the same errors as `std::from_chars`,
+		/// returns `std::errc::invalid_argument` if not all of the characters
+		/// in `str` were used. If this happens, `value` will be left unchanged.
+		std::from_chars_result from_chars(std::string_view str, int & value, int base = 10);
 		
 		/// Insert copies of `ch` at the front of `str` until its length is at
 		/// least `min_l`.
