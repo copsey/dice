@@ -1,5 +1,9 @@
 # History
 
+### 0.4 (2021-??-??)
+ - Remove redundant synonyms in interactive mode.
+   (e.g., 'c' is no longer a synonym for 'choose')
+
 ### 0.3 (2021-03-11)
  - Add '?' as synonym for 'help' in interactive mode.
  - Quit interactive mode when end-of-file (CTRL-D) is encountered.

@@ -8,18 +8,19 @@
 
 namespace dice {
 	namespace util {
-		/// Split `str` into the vector of non-empty substrings that are delimited
-		/// by whitespace in `str`.
+		/// Split `str` into the vector of non-empty substrings that are
+		/// delimited by whitespace in `str`.
 		///
 		/// Empty substrings are automatically removed.
 		std::vector<std::string_view> split_and_prune(std::string_view str);
 
-		/// Convert `str` into an int, using the given numeric base,
-		/// and store the result in `value`.
+		/// Convert `str` into an int, using the given numeric base, and store
+		/// the result in `value`.
 		///
 		/// In addition to flagging the same errors as `std::from_chars`,
 		/// returns `std::errc::invalid_argument` if not all of the characters
-		/// in `str` were used. If this happens, `value` will be left unchanged.
+		/// in `str` were used. If this happens, `value` will be left
+		/// unchanged.
 		std::from_chars_result from_chars(std::string_view str, int & value, int base = 10);
 		
 		/// Insert copies of `ch` at the front of `str` until its length is at
