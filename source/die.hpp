@@ -1,6 +1,8 @@
 #ifndef DICE_DIE
 #define DICE_DIE
 
+#include <cassert>
+
 #include "random.hpp"
 
 namespace dice {
