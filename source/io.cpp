@@ -171,7 +171,7 @@ void dice::print_cl_help(std::string_view basename) {
 
 void dice::print_version() {
 	std::cout << "dice " << version_c_str << "\n"
-              << "Copyright (c) 2016-2021 Jack Copsey\n";
+              << "Copyright (c) 2016-2023 Jack Copsey\n";
 }
 
 void dice::print_nonexistent_option_hint(std::string_view str, std::string_view basename) {
