@@ -1,6 +1,6 @@
 # History
 
-### 0.4 (2021-??-??)
+### 0.3.1 (2023-05-27)
  - Remove redundant synonyms in interactive mode.
    (e.g., 'c' is no longer a synonym for 'choose')
 
